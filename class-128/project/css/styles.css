@@ -1,0 +1,16 @@
+.card {
+    transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 .75rem 2rem rgba(0,0,0,.15);
+}
+
+.card-title {
+    min-height: 40px;
+}
+
+.list-group {
+    flex-grow: 1;
+}
