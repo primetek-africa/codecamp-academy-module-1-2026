@@ -73,10 +73,10 @@ VALUES
 -- Insert rows in the table 'book'
 INSERT INTO book (title, isbn, publication_year, available, author_id)
 VALUES
-('Harry Potter and the Philosopher''s Stone', '9780747532743', 1997, TRUE, 1)
-('1984', '9780451524935', 1949, TRUE, 2)
-('One hundred years of solitude', '9780307474728', 1967, TRUE, 3)
-('Pride and Prejudice', '9780141439518', 1813, FALSE, 4)
+('Harry Potter and the Philosopher''s Stone', '9780747532743', 1997, TRUE, 1),
+('1984', '9780451524935', 1949, TRUE, 2),
+('One hundred years of solitude', '9780307474728', 1967, TRUE, 3),
+('Pride and Prejudice', '9780141439518', 1813, FALSE, 4),
 ('The Shining', '9780307743657', 1977, FALSE, 5);
 -------------------------------------------------------------------------------
 
