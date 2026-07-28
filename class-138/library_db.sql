@@ -1,10 +1,14 @@
 -- This is a SQL comment
 
+-------------------------------------------------------------------------------
 -- Command to create a database
 CREATE DATABASE library_db;
+-------------------------------------------------------------------------------
 
+-------------------------------------------------------------------------------
 -- Connect to the database before executing the
 -- remaining statements.
+-------------------------------------------------------------------------------
 
 -- Command to create a table
 -- Create the table 'Author'
@@ -15,6 +19,7 @@ CREATE TABLE author (
     birth_year  INT NOT NULL,
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+-------------------------------------------------------------------------------
 
 -- Create the table 'Book'
 CREATE TABLE book (
@@ -26,6 +31,7 @@ CREATE TABLE book (
     author_id           INT NOT NULL,
     created_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+-------------------------------------------------------------------------------
 
 -- Create the table 'Member'
 CREATE TABLE member (
@@ -36,6 +42,7 @@ CREATE TABLE member (
     phone       VARCHAR(20) UNIQUE NOT NULL,
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+-------------------------------------------------------------------------------
 
 -- Create the table 'Loan'
 CREATE TABLE loan (
@@ -46,3 +53,34 @@ CREATE TABLE loan (
     return_date     DATE,
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+-------------------------------------------------------------------------------
+
+-- Command to insert data (rows) in a table
+-- Insert rows in the table 'author'
+INSERT INTO author (full_name, country, birth_year)
+VALUES ('J.K Rowling', 'United Kingdom', 1965);
+
+INSERT INTO author (full_name, country, birth_year)
+VALUES ('George Orwell', 'United Kingdom', 1903);
+
+INSERT INTO author (full_name, country, birth_year)
+VALUES 
+('Gabriel Garcia Marquez', 'Colombia', 1927),
+('Jane Austen', 'United Kingdom', 1775),
+('Stephen King', 'United States', 1947);
+-------------------------------------------------------------------------------
+
+-- Insert rows in the table 'book'
+INSERT INTO book (title, isbn, publication_year, available, author_id)
+VALUES
+('Harry Potter and the Philosopher''s Stone', '9780747532743', 1997, TRUE, 1)
+('1984', '9780451524935', 1949, TRUE, 2)
+('One hundred years of solitude', '9780307474728', 1967, TRUE, 3)
+('Pride and Prejudice', '9780141439518', 1813, FALSE, 4)
+('The Shining', '9780307743657', 1977, FALSE, 5);
+-------------------------------------------------------------------------------
+
+-- Display the records from a table
+SELECT * FROM author;
+-------------------------------------------------------------------------------
+SELECT * FROM book;
