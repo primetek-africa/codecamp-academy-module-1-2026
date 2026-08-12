@@ -7,7 +7,7 @@
 -- QUERY 1
 -- Doctors Above the Average
 -- ============================================================
-
+ 
 SELECT
     d.id_doctor,
     d.first_name_doctor,
@@ -31,13 +31,13 @@ HAVING COUNT(a.id_appointment) > (
     ) AS doctor_counts
 )
 ORDER BY appointment_count DESC;
-
-
+ 
+ 
 -- ============================================================
 -- QUERY 2
 -- Patients With More Appointments Than Average
 -- ============================================================
-
+ 
 SELECT
     p.id_patient,
     p.first_name_patient,
@@ -61,13 +61,13 @@ HAVING COUNT(a.id_appointment) > (
     ) AS patient_counts
 )
 ORDER BY appointment_count DESC;
-
-
+ 
+ 
 -- ============================================================
 -- QUERY 3
 -- Doctors Without Cancelled Appointments
 -- ============================================================
-
+ 
 SELECT
     d.id_doctor,
     d.first_name_doctor,
@@ -85,13 +85,18 @@ WHERE NOT EXISTS (
 ORDER BY
     d.last_name_doctor,
     d.first_name_doctor;
-
-
+ 
+ 
 -- ============================================================
 -- QUERY 4
 -- Patients With the Same Diagnosis as Carlos Martinez
 -- ============================================================
-
+-- Note: assumes a single patient named 'Carlos Martinez'. If two
+-- patients could share that exact name, the scalar subquery below
+-- would raise "more than one row returned by a subquery used as
+-- an expression". Add LIMIT 1 there (or filter by id_patient
+-- instead of name) if that's a real possibility in your data.
+ 
 SELECT DISTINCT
     p.id_patient,
     p.first_name_patient,
@@ -120,13 +125,18 @@ AND p.id_patient <> (
 ORDER BY
     p.last_name_patient,
     p.first_name_patient;
-
-
+ 
+ 
 -- ============================================================
 -- QUERY 5
 -- Doctors Above the Average of Completed Appointments
 -- ============================================================
-
+-- FIX: the inner average subquery now uses
+-- COUNT(...) FILTER (WHERE ...) instead of LEFT JOIN + WHERE.
+-- This keeps every doctor in the average (counting 0 completed
+-- appointments where applicable) instead of silently dropping
+-- doctors who have never had a completed appointment.
+ 
 SELECT
     d.id_doctor,
     d.first_name_doctor,
@@ -151,14 +161,16 @@ HAVING COUNT(a.id_appointment) > (
     FROM (
         SELECT
             d_inner.id_doctor,
-            COUNT(a_inner.id_appointment) AS completed_appointments
+            COUNT(a_inner.id_appointment) FILTER (
+                WHERE cs_inner.name_c_status = 'Completed'
+            ) AS completed_appointments
         FROM doctor AS d_inner
         LEFT JOIN appointment AS a_inner
             ON a_inner.doctor_id_appointment = d_inner.id_doctor
         LEFT JOIN catalog_status AS cs_inner
             ON cs_inner.id_c_status = a_inner.status_appointment
-        WHERE cs_inner.name_c_status = 'Completed'
         GROUP BY d_inner.id_doctor
     ) AS doctor_completed_counts
 )
 ORDER BY completed_appointments DESC;
+ 
