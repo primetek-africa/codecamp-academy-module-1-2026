@@ -10,6 +10,7 @@
  
 SELECT DISTINCT
     p.id_patient,
+    a.id_appointment,
     p.first_name_patient,
     p.last_name_patient,
     p.email_patient
