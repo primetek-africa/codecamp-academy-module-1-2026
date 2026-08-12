@@ -179,7 +179,7 @@ CREATE TABLE medical_record (
 -- ------------------------------------------------------------
 CREATE INDEX idx_patient_gender            ON patient (gender_patient);
 CREATE INDEX idx_doctor_gender             ON doctor (gender_doctor);
-CREATE INDEX idx_doctor_specialty         ON doctor (specialty_doctor);
+CREATE INDEX idx_doctor_specialty          ON doctor (specialty_doctor);
 CREATE INDEX idx_appointment_status        ON appointment (status_appointment);
 CREATE INDEX idx_appointment_patient       ON appointment (patience_id_appointment);
 CREATE INDEX idx_appointment_doctor        ON appointment (doctor_id_appointment);
