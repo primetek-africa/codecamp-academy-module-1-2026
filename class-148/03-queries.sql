@@ -166,36 +166,33 @@ HAVING COUNT(a.id_appointment) = (
 -- QUERY 08
 -- Display complete appointment information.
 -- ============================================================
- 
 SELECT
-    a.id_appointment,
-    a.date_appointment,
-    a.time_appointment,
-    p.first_name_patient || ' ' ||
-        p.last_name_patient AS patient_name,
-    d.first_name_doctor || ' ' ||
-        d.last_name_doctor AS doctor_name,
-    s.name_specialty AS specialty,
-    cs.name_c_status AS appointment_status,
-    cd.name_c_diagnosis AS diagnosis,
-    ct.name_c_treatment AS treatment,
-    r.room_number,
-    a.notes_appointment
+	a.id_appointment,
+	a.date_appointment,
+	a.time_appointment,
+	CONCAT(	p.first_name_patient, ' ', p.last_name_patient) AS patient_name,
+	CONCAT(	d.first_name_doctor, ' ', d.last_name_doctor) AS doctor_name,
+	s.name_specialty AS specialty,
+	cs.name_c_status AS appointment_status,
+	cd.name_c_diagnosis AS diagnosis,
+	ct.name_c_treatment AS treatment,
+	r.room_number,
+	a.notes_appointment
 FROM appointment AS a
 INNER JOIN patient AS p
-    ON p.id_patient = a.patience_id_appointment
+	ON p.id_patient = a.patience_id_appointment
 INNER JOIN doctor AS d
-    ON d.id_doctor = a.doctor_id_appointment
+	ON d.id_doctor = a.doctor_id_appointment
 INNER JOIN specialty AS s
-    ON s.id_specialty = d.specialty_doctor
+	ON s.id_specialty = d.specialty_doctor
 INNER JOIN catalog_status AS cs
-    ON cs.id_c_status = a.status_appointment
+	ON cs.id_c_status = a.status_appointment
 INNER JOIN catalog_diagnosis AS cd
-    ON cd.id_c_diagnosis = a.diagnosis_appointment
+	ON cd.id_c_diagnosis = a.diagnosis_appointment
 INNER JOIN catalog_treatment AS ct
-    ON ct.id_c_treatment = a.treatment_appointment
+	ON ct.id_c_treatment = a.treatment_appointment
 INNER JOIN room AS r
-    ON r.id_room = a.room_appointment
+	ON r.id_room = a.room_appointment
 ORDER BY a.date_appointment, a.time_appointment;
  
  
