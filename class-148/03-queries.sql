@@ -378,10 +378,6 @@ WHERE a.date_appointment = (
 -- Patients whose latest appointment is later than the average
 -- appointment date.
 -- ============================================================
--- FIX: date_appointment - DATE '2000-01-01' already returns an
--- integer number of days in PostgreSQL (not an interval), so
--- EXTRACT(EPOCH FROM ...) on it errors out. We now average that
--- integer directly and add it back to the base date.
  
 SELECT
     p.id_patient,
