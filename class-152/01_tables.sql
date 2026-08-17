@@ -1,6 +1,5 @@
 -- =====================================================================
--- Airline Reservation System - PostgreSQL Schema (3NF)
--- Generated from project-3-3NF ERD
+-- Airline Reservation System
 -- =====================================================================
 
 BEGIN;
