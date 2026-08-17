@@ -63,3 +63,31 @@ SELECT
 	registration_number_aircraft,
 	employee_number_pilot
 FROM vw_flight_details;
+
+-- =====================================================================
+-- VIEW 02
+-- Passenger profiles with nationality and gender
+-- =====================================================================
+CREATE OR REPLACE VIEW vw_passenger_profiles AS
+SELECT
+	p.id_passenger,
+	p.number_passport_passenger,
+	CONCAT(p.first_name_passenger, ' ', p.last_name_passenger) AS passenger_name,
+	p.date_birth_passenger,
+	EXTRACT(
+		YEAR FROM AGE(CURRENT_DATE, p.date_birth_passenger)
+	)::INT AS passenger_age,
+	g.name_gender AS gender,
+	c.name_country AS nationality,
+	c.code_iso2_country AS nationality_code,
+	p.email_passenger
+FROM passenger AS p
+JOIN gender AS g
+	ON p.gender_passenger = g.id_gender
+JOIN country AS c
+	ON p.nationality_passenger = c.id_country
+ORDER BY p.id_passenger;
+
+SELECT
+*
+FROM vw_passenger_profiles;
