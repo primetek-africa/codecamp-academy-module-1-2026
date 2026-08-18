@@ -143,3 +143,51 @@ WHERE capacity_aircraft > 200;
 SELECT *
 FROM vw_flight_occupancy
 WHERE occupancy_percentage > 3;
+
+-- =====================================================================
+-- VIEW 04
+-- Passenger travel history
+-- =====================================================================
+CREATE OR REPLACE VIEW vw_passenger_travel_history AS
+SELECT
+    p.id_passenger,
+    CONCAT(p.first_name_passenger, ' ', p.last_name_passenger) AS passenger_name,
+    c.name_country AS nationality,
+    f.number_flight,
+    f.departure_date_flight,
+    ao.code_airport AS origin_airport,
+    ad.code_airport AS destination_airport,
+    rs.name_reservation_status AS reservation_status,
+    t.number_ticket,
+    t.price_ticket,
+    ps.name_payment_status AS payment_status
+FROM passenger AS p
+JOIN country AS c
+    ON p.nationality_passenger = c.id_country
+JOIN reservation AS r
+    ON p.id_passenger = r.passenger_id_reservation
+JOIN flight AS f
+    ON r.flight_id_registration = f.id_flight
+JOIN airport AS ao
+    ON f.origin_airport_flight = ao.id_airport
+JOIN airport AS ad
+    ON f.destination_airport_flight = ad.id_airport
+JOIN reservation_status AS rs
+    ON r.status_reservation = rs.id_reservation_status
+LEFT JOIN ticket AS t
+    ON r.id_reservation = t.reservation_id_ticket
+LEFT JOIN payment_status AS ps
+    ON t.payment_status_ticket = ps.id_payment_status
+ORDER BY p.id_passenger;
+
+SELECT *
+FROM vw_passenger_travel_history
+WHERE id_passenger = 1;
+
+SELECT *
+FROM vw_passenger_travel_history
+WHERE price_ticket > 300;
+
+SELECT *
+FROM vw_passenger_travel_history
+WHERE payment_status = 'Failed';
