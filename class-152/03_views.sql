@@ -91,3 +91,55 @@ ORDER BY p.id_passenger;
 SELECT
 *
 FROM vw_passenger_profiles;
+
+-- =====================================================================
+-- VIEW 03
+-- Flight occupancy and reservation statistics
+-- =====================================================================
+CREATE OR REPLACE VIEW vw_flight_occupancy AS
+SELECT
+	f.id_flight,
+	f.number_flight,
+	f.departure_date_flight,
+	a.registration_number_aircraft,
+	a.capacity_aircraft,
+	COUNT(r.id_reservation) AS total_reservations,
+	COUNT(
+		CASE
+			WHEN rs.name_reservation_status IN 
+				('Confirmed', 'Checked-in')
+			THEN 1
+		END
+	) AS active_reservations,
+	ROUND(
+		COUNT(
+			CASE
+				WHEN rs.name_reservation_status IN
+					('Confirmed', 'Checked-in')
+				THEN 1
+			END
+		) * 100.0 / a.capacity_aircraft,
+		3
+	) AS occupancy_percentage
+FROM flight AS f
+JOIN aircraft AS a
+	ON f.aircraft_id_flight = a.id_aircraft
+LEFT JOIN reservation AS r
+	ON f.id_flight = r.flight_id_registration
+LEFT JOIN reservation_status AS rs
+	ON r.status_reservation = rs.id_reservation_status
+GROUP BY
+	f.id_flight,
+	f.number_flight,
+	f.departure_date_flight,
+	a.registration_number_aircraft,
+	a.capacity_aircraft
+ORDER BY f.id_flight;
+
+SELECT *
+FROM vw_flight_occupancy
+WHERE capacity_aircraft > 200;
+
+SELECT *
+FROM vw_flight_occupancy
+WHERE occupancy_percentage > 3;
