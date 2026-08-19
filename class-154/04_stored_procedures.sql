@@ -11,8 +11,8 @@ CREATE OR REPLACE PROCEDURE sp_register_passenger(
     IN  p_gender_id              INT,
     IN  p_email                  VARCHAR,
     IN  p_nationality_id         INT,
-    IN  p_phone_number           VARCHAR DEFAULT NULL,
-    OUT p_passenger_id           INT
+    OUT p_passenger_id           INT,
+    IN  p_phone_number           VARCHAR DEFAULT NULL
 )
 LANGUAGE plpgsql
 AS $$
