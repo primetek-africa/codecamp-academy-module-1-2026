@@ -1,5 +1,5 @@
 -- =====================================================================
--- STORE PROCEDURE 01
+-- STORED PROCEDURE 01
 -- Registers a new passenger and, optionally, links a phone number to
 -- them (creating the phone row if it doesn't already exist).
 -- =====================================================================
