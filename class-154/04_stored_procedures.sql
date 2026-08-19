@@ -78,5 +78,6 @@ CALL sp_register_passenger(
     2,
     'louis.kim@email.com',
     1,
+    NULL,
     '+1 646 555 0199'
-); 
+);
