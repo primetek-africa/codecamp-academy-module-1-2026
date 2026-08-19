@@ -252,3 +252,298 @@ WHERE total_revenue > 1000;
 SELECT *
 FROM vw_flight_revenue
 WHERE average_ticket_price > 500;
+
+-- =====================================================================
+-- VIEW 06
+-- Pilot operational performance
+-- =====================================================================
+
+CREATE OR REPLACE VIEW vw_pilot_performance AS
+SELECT
+    p.id_pilot,
+    p.employee_number_pilot,
+    CONCAT(
+        p.first_name_pilot,
+        ' ',
+        p.last_name_pilot
+    ) AS pilot_name,
+    COUNT(f.id_flight) AS total_flights,
+    COUNT(
+        CASE
+            WHEN fs.name_flight_status = 'Completed'
+            THEN 1
+        END
+    ) AS completed_flights,
+    COUNT(
+        CASE
+            WHEN fs.name_flight_status = 'Delayed'
+            THEN 1
+        END
+    ) AS delayed_flights,
+    COUNT(
+        CASE
+            WHEN fs.name_flight_status = 'Cancelled'
+            THEN 1
+        END
+    ) AS cancelled_flights,
+    ROUND(
+        COUNT(
+            CASE
+                WHEN fs.name_flight_status = 'Completed'
+                THEN 1
+            END
+        ) * 100.0 / NULLIF(COUNT(f.id_flight), 0),
+        2
+    ) AS completion_rate
+FROM pilot p
+LEFT JOIN flight f
+    ON p.id_pilot = f.pilot_id_flight
+LEFT JOIN flight_status fs
+    ON f.status_flight = fs.id_flight_status
+GROUP BY
+    p.id_pilot,
+    p.employee_number_pilot,
+    p.first_name_pilot,
+    p.last_name_pilot;
+
+SELECT *
+FROM vw_pilot_performance;
+
+-- =====================================================================
+-- VIEW 07
+-- Route performance
+-- =====================================================================
+
+CREATE OR REPLACE VIEW vw_route_performance AS
+SELECT
+    ao.code_airport AS origin_airport,
+    ad.code_airport AS destination_airport,
+    COUNT(DISTINCT f.id_flight) AS total_flights,
+    COUNT(DISTINCT r.id_reservation) AS total_reservations,
+    COUNT(DISTINCT t.id_ticket) AS tickets_sold,
+    COALESCE(
+        SUM(
+            CASE
+                WHEN ps.name_payment_status = 'Paid'
+                THEN t.price_ticket
+                ELSE 0
+            END
+        ),
+        0
+    ) AS total_revenue,
+    ROUND(
+        AVG(
+            CASE
+                WHEN ps.name_payment_status = 'Paid'
+                THEN t.price_ticket
+            END
+        ),
+        2
+    ) AS average_ticket_price
+FROM flight f
+JOIN airport ao
+    ON f.origin_airport_flight = ao.id_airport
+JOIN airport ad
+    ON f.destination_airport_flight = ad.id_airport
+LEFT JOIN reservation r
+    ON f.id_flight = r.flight_id_registration
+LEFT JOIN ticket t
+    ON r.id_reservation = t.reservation_id_ticket
+LEFT JOIN payment_status ps
+    ON t.payment_status_ticket = ps.id_payment_status
+GROUP BY
+    ao.code_airport,
+    ad.code_airport;
+
+SELECT *
+FROM vw_route_performance
+ORDER BY total_revenue DESC;
+
+-- =====================================================================
+-- VIEW 08
+-- Aircraft utilization
+-- =====================================================================
+
+CREATE OR REPLACE VIEW vw_aircraft_utilization AS
+SELECT
+    a.id_aircraft,
+    a.registration_number_aircraft,
+    ab.name_aircraft_brand AS aircraft_brand,
+    a.model_aircraft,
+    a.manufacture_year_aircraft,
+    a.capacity_aircraft,
+    COUNT(f.id_flight) AS total_flights,
+    COUNT(
+        CASE
+            WHEN fs.name_flight_status = 'Completed'
+            THEN 1
+        END
+    ) AS completed_flights,
+    COUNT(
+        CASE
+            WHEN fs.name_flight_status = 'Cancelled'
+            THEN 1
+        END
+    ) AS cancelled_flights,
+    ROUND(
+        AVG(
+            CASE
+                WHEN fs.name_flight_status = 'Completed'
+                THEN a.capacity_aircraft
+            END
+        ),
+        2
+    ) AS average_operational_capacity
+FROM aircraft a
+JOIN aircraft_brand ab
+    ON a.manufacture_aircraft = ab.id_aircraft_brand
+LEFT JOIN flight f
+    ON a.id_aircraft = f.aircraft_id_flight
+LEFT JOIN flight_status fs
+    ON f.status_flight = fs.id_flight_status
+GROUP BY
+    a.id_aircraft,
+    a.registration_number_aircraft,
+    ab.name_aircraft_brand,
+    a.model_aircraft,
+    a.manufacture_year_aircraft,
+    a.capacity_aircraft;
+
+SELECT *
+FROM vw_aircraft_utilization;
+
+-- =====================================================================
+-- VIEW 09
+-- Country-level passenger analytics
+-- =====================================================================
+
+CREATE OR REPLACE VIEW vw_country_passenger_statistics AS
+SELECT
+    c.id_country,
+    c.name_country,
+    c.code_iso2_country,
+    COUNT(DISTINCT p.id_passenger) AS total_passengers,
+    COUNT(DISTINCT r.id_reservation) AS total_reservations,
+    COUNT(DISTINCT f.id_flight) AS flights_used,
+    COALESCE(
+        SUM(
+            CASE
+                WHEN ps.name_payment_status = 'Paid'
+                THEN t.price_ticket
+                ELSE 0
+            END
+        ),
+        0
+    ) AS total_revenue
+FROM country c
+LEFT JOIN passenger p
+    ON c.id_country = p.nationality_passenger
+LEFT JOIN reservation r
+    ON p.id_passenger = r.passenger_id_reservation
+LEFT JOIN flight f
+    ON r.flight_id_registration = f.id_flight
+LEFT JOIN ticket t
+    ON r.id_reservation = t.reservation_id_ticket
+LEFT JOIN payment_status ps
+    ON t.payment_status_ticket = ps.id_payment_status
+GROUP BY
+    c.id_country,
+    c.name_country,
+    c.code_iso2_country;
+
+SELECT *
+FROM vw_country_passenger_statistics
+WHERE total_passengers > (
+    SELECT AVG(total_passengers)
+    FROM vw_country_passenger_statistics
+);
+
+-- =====================================================================
+-- VIEW 10
+-- Complete commercial flight analysis
+-- =====================================================================
+
+CREATE OR REPLACE VIEW vw_flight_business_analysis AS
+WITH flight_stats AS (
+    SELECT
+        f.id_flight,
+        COUNT(r.id_reservation) AS reservations,
+        COUNT(
+            CASE
+                WHEN rs.name_reservation_status IN
+                    ('Confirmed', 'Checked-in')
+                THEN 1
+            END
+        ) AS active_reservations
+    FROM flight f
+    LEFT JOIN reservation r
+        ON f.id_flight = r.flight_id_registration
+    LEFT JOIN reservation_status rs
+        ON r.status_reservation = rs.id_reservation_status
+    GROUP BY f.id_flight
+),
+revenue_stats AS (
+    SELECT
+        r.flight_id_registration AS flight_id,
+        COUNT(t.id_ticket) AS tickets_sold,
+        SUM(
+            CASE
+                WHEN ps.name_payment_status = 'Paid'
+                THEN t.price_ticket
+                ELSE 0
+            END
+        ) AS revenue
+    FROM reservation r
+    LEFT JOIN ticket t
+        ON r.id_reservation = t.reservation_id_ticket
+    LEFT JOIN payment_status ps
+        ON t.payment_status_ticket = ps.id_payment_status
+    GROUP BY r.flight_id_registration
+)
+SELECT
+    f.number_flight,
+    f.departure_date_flight,
+    ao.code_airport AS origin_airport,
+    ad.code_airport AS destination_airport,
+    a.model_aircraft,
+    a.capacity_aircraft,
+    fs.name_flight_status AS flight_status,
+    COALESCE(fls.reservations, 0) AS reservations,
+    COALESCE(fls.active_reservations, 0) AS active_reservations,
+    ROUND(
+        COALESCE(fls.active_reservations, 0) * 100.0 /
+        NULLIF(a.capacity_aircraft, 0),
+        2
+    ) AS occupancy_percentage,
+    COALESCE(rs.tickets_sold, 0) AS tickets_sold,
+    COALESCE(rs.revenue, 0) AS total_revenue,
+    CASE
+        WHEN COALESCE(fls.active_reservations, 0) = 0
+            THEN 'Empty'
+        WHEN fls.active_reservations::DECIMAL /
+            a.capacity_aircraft >= 0.90
+            THEN 'Very High Demand'
+        WHEN fls.active_reservations::DECIMAL /
+            a.capacity_aircraft >= 0.70
+            THEN 'High Demand'
+        WHEN fls.active_reservations::DECIMAL /
+            a.capacity_aircraft >= 0.40
+            THEN 'Moderate Demand'
+        ELSE 'Low Demand'
+    END AS demand_category
+FROM flight f
+JOIN airport ao
+    ON f.origin_airport_flight = ao.id_airport
+JOIN airport ad
+    ON f.destination_airport_flight = ad.id_airport
+JOIN aircraft a
+    ON f.aircraft_id_flight = a.id_aircraft
+JOIN flight_status fs
+    ON f.status_flight = fs.id_flight_status
+LEFT JOIN flight_stats fls
+    ON f.id_flight = fls.id_flight
+LEFT JOIN revenue_stats rs
+    ON f.id_flight = rs.flight_id;
+
+SELECT *
+FROM vw_flight_business_analysis;
