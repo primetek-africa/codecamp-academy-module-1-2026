@@ -257,16 +257,11 @@ WHERE average_ticket_price > 500;
 -- VIEW 06
 -- Pilot operational performance
 -- =====================================================================
-
 CREATE OR REPLACE VIEW vw_pilot_performance AS
 SELECT
     p.id_pilot,
     p.employee_number_pilot,
-    CONCAT(
-        p.first_name_pilot,
-        ' ',
-        p.last_name_pilot
-    ) AS pilot_name,
+    CONCAT(p.first_name_pilot, ' ', p.last_name_pilot) AS pilot_name,
     COUNT(f.id_flight) AS total_flights,
     COUNT(
         CASE
@@ -293,7 +288,7 @@ SELECT
                 THEN 1
             END
         ) * 100.0 / NULLIF(COUNT(f.id_flight), 0),
-        2
+        3
     ) AS completion_rate
 FROM pilot p
 LEFT JOIN flight f
@@ -304,7 +299,8 @@ GROUP BY
     p.id_pilot,
     p.employee_number_pilot,
     p.first_name_pilot,
-    p.last_name_pilot;
+    p.last_name_pilot
+ORDER BY p.id_pilot;
 
 SELECT *
 FROM vw_pilot_performance;
@@ -313,7 +309,6 @@ FROM vw_pilot_performance;
 -- VIEW 07
 -- Route performance
 -- =====================================================================
-
 CREATE OR REPLACE VIEW vw_route_performance AS
 SELECT
     ao.code_airport AS origin_airport,
@@ -338,7 +333,7 @@ SELECT
                 THEN t.price_ticket
             END
         ),
-        2
+        3
     ) AS average_ticket_price
 FROM flight f
 JOIN airport ao
@@ -363,7 +358,6 @@ ORDER BY total_revenue DESC;
 -- VIEW 08
 -- Aircraft utilization
 -- =====================================================================
-
 CREATE OR REPLACE VIEW vw_aircraft_utilization AS
 SELECT
     a.id_aircraft,
@@ -392,7 +386,7 @@ SELECT
                 THEN a.capacity_aircraft
             END
         ),
-        2
+        3
     ) AS average_operational_capacity
 FROM aircraft a
 JOIN aircraft_brand ab
@@ -407,7 +401,8 @@ GROUP BY
     ab.name_aircraft_brand,
     a.model_aircraft,
     a.manufacture_year_aircraft,
-    a.capacity_aircraft;
+    a.capacity_aircraft
+ORDER BY a.id_aircraft;
 
 SELECT *
 FROM vw_aircraft_utilization;
@@ -416,7 +411,6 @@ FROM vw_aircraft_utilization;
 -- VIEW 09
 -- Country-level passenger analytics
 -- =====================================================================
-
 CREATE OR REPLACE VIEW vw_country_passenger_statistics AS
 SELECT
     c.id_country,
@@ -462,7 +456,6 @@ WHERE total_passengers > (
 -- VIEW 10
 -- Complete commercial flight analysis
 -- =====================================================================
-
 CREATE OR REPLACE VIEW vw_flight_business_analysis AS
 WITH flight_stats AS (
     SELECT
@@ -513,7 +506,7 @@ SELECT
     ROUND(
         COALESCE(fls.active_reservations, 0) * 100.0 /
         NULLIF(a.capacity_aircraft, 0),
-        2
+        3
     ) AS occupancy_percentage,
     COALESCE(rs.tickets_sold, 0) AS tickets_sold,
     COALESCE(rs.revenue, 0) AS total_revenue,
