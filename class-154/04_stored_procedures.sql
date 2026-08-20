@@ -130,3 +130,100 @@ CALL sp_register_passenger(
     NULL,
     '+44 20 7946 0958'
 );
+
+-- =====================================================================
+-- 2. sp_create_reservation
+-- ---------------------------------------------------------------------
+-- Books a seat for a passenger on a flight.
+-- Validates: flight exists and is not cancelled/departed/completed,
+-- seat is not already taken on that flight, and the aircraft still has
+-- available capacity. New reservation is created with status 'Pending'.
+-- =====================================================================
+CREATE OR REPLACE PROCEDURE sp_create_reservation(
+    IN p_passenger_id       INT,
+    IN p_flight_id          INT,
+    IN p_seat_number        VARCHAR,
+    OUT p_reservation_id    INT   
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_flight_status         VARCHAR := '^(Confirmed|Pending|Cancelled|Checked-in|No-show)$';
+    v_capacity              INT;
+    v_booked_seats          INT;
+    v_pending_status        INT;
+    c_seat_rx               CONSTANT VARCHAR := '^[0-9]{1,2}[A-Z]{1}$';
+BEGIN
+    IF p_seat_number !~ c_seat_rx THEN
+        RAISE EXCEPTION 'Invalid seat format: %. Expected 1-2 digits + a letter (e.g. 1A, 12C).',
+            p_seat_number;
+    END IF;
+
+    SELECT
+        fs.name_flight_status,
+        ac.capacity_aircraft
+    INTO v_flight_status, v_capacity
+    FROM flight AS f
+    JOIN flight_status AS fs
+        ON fs.id_flight_status = f.status_flight
+    JOIN aircraft AS ac
+        ON ac.id_aircraft = f.aircraft_id_flight
+    WHERE f.id_flight = p_flight_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Flight % does not exists.', p_flight_id;
+    END IF;
+
+    IF EXISTS (
+        SELECT 1
+        FROM reservation
+        WHERE flight_id_registration = p_flight_id
+            AND seat_number_reservation = p_seat_number
+    ) THEN
+        RAISE EXCEPTION 'Seat % is already taken on flight %.',
+            p_seat_number, p_flight_id;
+    END IF;
+
+    SELECT 
+        COUNT(*) INTO v_booked_seats
+    FROM reservation AS r
+    JOIN reservation_status AS rs
+        ON rs.id_reservation_status = r.status_reservation
+    WHERE r.flight_id_registration = p_flight_id
+        AND rs.name_reservation_status <> 'Cancelled';
+
+    IF v_booked_seats >= v_capacity THEN
+        RAISE EXCEPTION 'Flight % is fully booked (capacity %).',
+            p_flight_id, v_capacity;
+    END IF;
+
+    SELECT
+        id_reservation_status INTO v_pending_status
+    FROM reservation_status
+    WHERE name_reservation_status = 'Pending';
+
+    INSERT INTO reservation (
+        date_reservation,
+        seat_number_reservation,
+        status_reservation,
+        passenger_id_reservation,
+        flight_id_registration
+    )
+    VALUES (
+        CURRENT_DATE,
+        p_seat_number,
+        v_pending_status,
+        p_passenger_id,
+        p_flight_id
+    )
+    RETURNING id_reservation INTO p_reservation_id;
+END;
+$$;
+
+-- Example
+CALL sp_create_reservation(
+    1, 
+    25, 
+    '4C', 
+    NULL
+);
