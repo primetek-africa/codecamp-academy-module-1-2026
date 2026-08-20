@@ -227,3 +227,45 @@ CALL sp_create_reservation(
     '4C', 
     NULL
 );
+
+-- =====================================================================
+-- 3. sp_confirm_reservation
+-- ---------------------------------------------------------------------
+-- Moves a reservation from 'Pending' to 'Confirmed'.
+-- =====================================================================
+CREATE OR REPLACE PROCEDURE sp_confirm_reservation(
+    IN p_reservation_id INT
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_current_status VARCHAR(20);
+    v_confirmed_id   INT;
+BEGIN
+    SELECT rs.name_reservation_status
+    INTO v_current_status
+    FROM reservation r
+    JOIN reservation_status rs ON rs.id_reservation_status = r.status_reservation
+    WHERE r.id_reservation = p_reservation_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Reservation % does not exist.', p_reservation_id;
+    END IF;
+
+    IF v_current_status <> 'Pending' THEN
+        RAISE EXCEPTION 'Reservation % cannot be confirmed from status %.',
+            p_reservation_id, v_current_status;
+    END IF;
+
+    SELECT id_reservation_status INTO v_confirmed_id
+    FROM reservation_status
+    WHERE name_reservation_status = 'Confirmed';
+
+    UPDATE reservation
+    SET status_reservation = v_confirmed_id
+    WHERE id_reservation = p_reservation_id;
+END;
+$$;
+
+-- Example:
+CALL sp_confirm_reservation(101);
