@@ -180,3 +180,44 @@ VALUES (
     1,
     27
 );
+
+-- =====================================================================
+-- TRIGGER 05
+-- Validate seat capacity
+-- =====================================================================
+CREATE OR REPLACE FUNCTION fn_validate_flight_capacity()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    flight_capacity     INT;
+    reservation_count   INT;
+BEGIN
+    SELECT
+        a.capacity_aircraft
+    INTO flight_capacity
+    FROM flight AS f
+    JOIN aircraft AS a
+        ON a.id_aircraft = f.aircraft_id_flight
+    WHERE f.id_flight = NEW.flight_id_registration;
+
+    SELECT
+        COUNT(*)
+    INTO reservation_count
+    FROM reservation
+    WHERE flight_id_registration = NEW.flight_id_registration;
+
+    IF reservation_count >= flight_capacity THEN
+        RAISE EXCEPTION 'Flight % has reached its capacity',
+            NEW.flight_id_registration;
+    END IF;
+
+    RETURN NEW;
+END;
+$$;
+
+CREATE OR REPLACE TRIGGER trg_validate_flight_capacity
+BEFORE INSERT OR UPDATE
+ON reservation
+FOR EACH ROW
+EXECUTE FUNCTION fn_validate_flight_capacity();
