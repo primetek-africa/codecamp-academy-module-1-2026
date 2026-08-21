@@ -587,3 +587,57 @@ $$;
 
 -- Example:
 CALL sp_update_flight_status(29, 'Boarding');
+
+-- =====================================================================
+-- 10. sp_reassign_pilot
+-- ---------------------------------------------------------------------
+-- Reassigns a flight to a different pilot, ensuring the new pilot
+-- has no other flight on the same date whose time window overlaps.
+-- =====================================================================
+
+CREATE OR REPLACE PROCEDURE sp_reassign_pilot(
+    IN p_flight_id     INT,
+    IN p_new_pilot_id  INT
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_departure_date DATE;
+    v_departure_time TIME;
+    v_arrival_time   TIME;
+    v_conflict_count INT;
+BEGIN
+    SELECT departure_date_flight, departure_time_flight, arrival_time_flight
+    INTO v_departure_date, v_departure_time, v_arrival_time
+    FROM flight
+    WHERE id_flight = p_flight_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Flight % does not exist.', p_flight_id;
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pilot WHERE id_pilot = p_new_pilot_id) THEN
+        RAISE EXCEPTION 'Pilot % does not exist.', p_new_pilot_id;
+    END IF;
+
+    SELECT COUNT(*) INTO v_conflict_count
+    FROM flight f
+    WHERE f.pilot_id_flight = p_new_pilot_id
+        AND f.id_flight <> p_flight_id
+        AND f.departure_date_flight = v_departure_date
+        AND f.departure_time_flight < v_arrival_time
+        AND v_departure_time < f.arrival_time_flight;
+
+    IF v_conflict_count > 0 THEN
+        RAISE EXCEPTION 'Pilot % already has an overlapping flight on %.',
+            p_new_pilot_id, v_departure_date;
+    END IF;
+
+    UPDATE flight
+    SET pilot_id_flight = p_new_pilot_id
+    WHERE id_flight = p_flight_id;
+END;
+$$;
+
+-- Example:
+CALL sp_reassign_pilot(1, 3);
