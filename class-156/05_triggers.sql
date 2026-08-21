@@ -127,3 +127,56 @@ VALUES (
     1,
     1
 );
+
+-- =====================================================================
+-- TRIGGER 04
+-- Prevent reservations on cancelled flights
+-- =====================================================================
+CREATE OR REPLACE FUNCTION fn_validate_reservation_flight()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    flight_status_name VARCHAR := '^(Confirmed|Pending|Cancelled|Checked-in|No-show)$';
+BEGIN
+    SELECT
+        fs.name_flight_status
+    INTO flight_status_name
+    FROM flight AS f
+    JOIN flight_status AS fs
+        ON fs.id_flight_status = f.status_flight
+    WHERE f.id_flight = NEW.flight_id_registration;
+
+    IF flight_status_name IN (
+        'Cancelled',
+        'Departed',
+        'Completed'
+    ) THEN
+        RAISE EXCEPTION 'Cannot reserve a seat on a % flight', 
+            flight_status_name;
+    END IF;
+
+    RETURN NEW;
+END;
+$$;
+
+CREATE OR REPLACE TRIGGER trg_validate_reservation_flight
+BEFORE INSERT OR UPDATE
+ON reservation
+FOR EACH ROW
+EXECUTE FUNCTION fn_validate_reservation_flight();
+
+INSERT INTO reservation (
+    date_reservation,
+    seat_number_reservation,
+    status_reservation,
+    passenger_id_reservation,
+    flight_id_registration
+)
+VALUES (
+    CURRENT_DATE,
+    '21A',
+    1,
+    1,
+    27
+);
