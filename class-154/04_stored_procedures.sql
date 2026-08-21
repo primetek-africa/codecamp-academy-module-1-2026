@@ -242,7 +242,8 @@ DECLARE
     v_current_status VARCHAR(20);
     v_confirmed_id   INT;
 BEGIN
-    SELECT rs.name_reservation_status
+    SELECT 
+        rs.name_reservation_status
     INTO v_current_status
     FROM reservation r
     JOIN reservation_status rs ON rs.id_reservation_status = r.status_reservation
@@ -286,10 +287,12 @@ DECLARE
     v_current_status  VARCHAR(20);
     v_cancelled_id    INT;
 BEGIN
-    SELECT rs.name_reservation_status
+    SELECT 
+        rs.name_reservation_status
     INTO v_current_status
     FROM reservation r
-    JOIN reservation_status rs ON rs.id_reservation_status = r.status_reservation
+    JOIN reservation_status rs 
+        ON rs.id_reservation_status = r.status_reservation
     WHERE r.id_reservation = p_reservation_id;
 
     IF NOT FOUND THEN
@@ -305,7 +308,8 @@ BEGIN
         RAISE EXCEPTION 'Reservation % is already cancelled.', p_reservation_id;
     END IF;
 
-    SELECT id_reservation_status INTO v_cancelled_id
+    SELECT 
+        id_reservation_status INTO v_cancelled_id
     FROM reservation_status
     WHERE name_reservation_status = 'Cancelled';
 
@@ -335,12 +339,17 @@ DECLARE
     v_flight_status      VARCHAR(20);
     v_checkedin_id       INT;
 BEGIN
-    SELECT rs.name_reservation_status, fs.name_flight_status
+    SELECT 
+        rs.name_reservation_status, 
+        fs.name_flight_status
     INTO v_reservation_status, v_flight_status
-    FROM reservation r
-    JOIN reservation_status rs ON rs.id_reservation_status = r.status_reservation
-    JOIN flight f              ON f.id_flight = r.flight_id_registration
-    JOIN flight_status fs      ON fs.id_flight_status = f.status_flight
+    FROM reservation AS r
+    JOIN reservation_status rs 
+        ON rs.id_reservation_status = r.status_reservation
+    JOIN flight AS f              
+        ON f.id_flight = r.flight_id_registration
+    JOIN flight_status AS fs      
+        ON fs.id_flight_status = f.status_flight
     WHERE r.id_reservation = p_reservation_id;
 
     IF NOT FOUND THEN
@@ -388,10 +397,12 @@ DECLARE
     v_pending_payment_id INT;
     v_new_ticket_id      INT;
 BEGIN
-    SELECT rs.name_reservation_status
+    SELECT 
+        rs.name_reservation_status
     INTO v_reservation_status
     FROM reservation r
-    JOIN reservation_status rs ON rs.id_reservation_status = r.status_reservation
+    JOIN reservation_status rs 
+        ON rs.id_reservation_status = r.status_reservation
     WHERE r.id_reservation = p_reservation_id;
 
     IF NOT FOUND THEN
@@ -411,17 +422,25 @@ BEGIN
         RAISE EXCEPTION 'Ticket price cannot be negative.';
     END IF;
 
-    SELECT id_payment_status INTO v_pending_payment_id
+    SELECT 
+        id_payment_status 
+    INTO v_pending_payment_id
     FROM payment_status
     WHERE name_payment_status = 'Pending';
 
     INSERT INTO ticket (
-        number_ticket, reservation_id_ticket, purchase_date_ticket,
-        price_ticket, payment_status_ticket
+        number_ticket, 
+        reservation_id_ticket, 
+        purchase_date_ticket,
+        price_ticket, 
+        payment_status_ticket
     )
     VALUES (
-        'TKT-PENDING', p_reservation_id, CURRENT_DATE,
-        p_price, v_pending_payment_id
+        'TKT-PENDING', 
+        p_reservation_id, 
+        CURRENT_DATE,
+        p_price, 
+        v_pending_payment_id
     )
     RETURNING id_ticket INTO v_new_ticket_id;
 
@@ -458,10 +477,12 @@ DECLARE
     v_current_status VARCHAR(20);
     v_paid_id        INT;
 BEGIN
-    SELECT ps.name_payment_status
+    SELECT 
+        ps.name_payment_status
     INTO v_current_status
     FROM ticket t
-    JOIN payment_status ps ON ps.id_payment_status = t.payment_status_ticket
+    JOIN payment_status ps 
+        ON ps.id_payment_status = t.payment_status_ticket
     WHERE t.id_ticket = p_ticket_id;
 
     IF NOT FOUND THEN
@@ -472,7 +493,9 @@ BEGIN
         RAISE EXCEPTION 'Ticket % cannot be paid from status %.', p_ticket_id, v_current_status;
     END IF;
 
-    SELECT id_payment_status INTO v_paid_id
+    SELECT 
+        id_payment_status 
+    INTO v_paid_id
     FROM payment_status
     WHERE name_payment_status = 'Paid';
 
@@ -503,10 +526,13 @@ DECLARE
     v_reservation_id  INT;
     v_refunded_id     INT;
 BEGIN
-    SELECT ps.name_payment_status, t.reservation_id_ticket
+    SELECT 
+        ps.name_payment_status, 
+        t.reservation_id_ticket
     INTO v_current_status, v_reservation_id
     FROM ticket t
-    JOIN payment_status ps ON ps.id_payment_status = t.payment_status_ticket
+    JOIN payment_status ps 
+        ON ps.id_payment_status = t.payment_status_ticket
     WHERE t.id_ticket = p_ticket_id;
 
     IF NOT FOUND THEN
@@ -518,7 +544,9 @@ BEGIN
             p_ticket_id, v_current_status;
     END IF;
 
-    SELECT id_payment_status INTO v_refunded_id
+    SELECT 
+        id_payment_status 
+    INTO v_refunded_id
     FROM payment_status
     WHERE name_payment_status = 'Refunded';
 
@@ -557,10 +585,12 @@ BEGIN
             p_new_status;
     END IF;
 
-    SELECT fs.name_flight_status
+    SELECT 
+        fs.name_flight_status
     INTO v_current_status
     FROM flight f
-    JOIN flight_status fs ON fs.id_flight_status = f.status_flight
+    JOIN flight_status fs 
+        ON fs.id_flight_status = f.status_flight
     WHERE f.id_flight = p_flight_id;
 
     IF NOT FOUND THEN
@@ -571,7 +601,9 @@ BEGIN
         RAISE EXCEPTION 'Flight % is already Completed and cannot be changed.', p_flight_id;
     END IF;
 
-    SELECT id_flight_status INTO v_new_status_id
+    SELECT 
+        id_flight_status 
+    INTO v_new_status_id
     FROM flight_status
     WHERE name_flight_status = p_new_status;
 
@@ -607,8 +639,13 @@ DECLARE
     v_arrival_time   TIME;
     v_conflict_count INT;
 BEGIN
-    SELECT departure_date_flight, departure_time_flight, arrival_time_flight
-    INTO v_departure_date, v_departure_time, v_arrival_time
+    SELECT 
+        departure_date_flight, 
+        departure_time_flight, 
+        arrival_time_flight
+        INTO v_departure_date, 
+        v_departure_time, 
+        v_arrival_time
     FROM flight
     WHERE id_flight = p_flight_id;
 
@@ -621,7 +658,7 @@ BEGIN
     END IF;
 
     SELECT COUNT(*) INTO v_conflict_count
-    FROM flight f
+    FROM flight AS f
     WHERE f.pilot_id_flight = p_new_pilot_id
         AND f.id_flight <> p_flight_id
         AND f.departure_date_flight = v_departure_date
