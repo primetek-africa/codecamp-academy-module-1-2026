@@ -91,3 +91,39 @@ VALUES (
 UPDATE pilot
 SET date_birth_pilot = '2020-01-15'
 WHERE id_pilot = 1;
+
+-- =====================================================================
+-- TRIGGER 03
+-- Automatically set reservation date
+-- =====================================================================
+CREATE OR REPLACE FUNCTION fn_set_reservation_date()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    IF NEW.date_reservation IS NULL THEN
+        NEW.date_reservation := CURRENT_DATE;
+    END IF;
+
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER trg_set_reservation_date
+BEFORE INSERT
+ON reservation
+FOR EACH ROW
+EXECUTE FUNCTION fn_set_reservation_date();
+
+INSERT INTO reservation (
+    seat_number_reservation,
+    status_reservation,
+    passenger_id_reservation,
+    flight_id_registration
+)
+VALUES (
+    '12A',
+    1,
+    1,
+    1
+);
