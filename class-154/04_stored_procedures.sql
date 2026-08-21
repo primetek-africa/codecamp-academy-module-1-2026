@@ -317,3 +317,54 @@ $$;
 
 -- Example:
 CALL sp_cancel_reservation(3);
+
+-- =====================================================================
+-- 5. sp_checkin_passenger
+-- ---------------------------------------------------------------------
+-- Checks in a passenger for a confirmed reservation. The flight must
+-- be Scheduled or Boarding.
+-- =====================================================================
+
+CREATE OR REPLACE PROCEDURE sp_checkin_passenger(
+    IN p_reservation_id INT
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_reservation_status VARCHAR(20);
+    v_flight_status      VARCHAR(20);
+    v_checkedin_id       INT;
+BEGIN
+    SELECT rs.name_reservation_status, fs.name_flight_status
+    INTO v_reservation_status, v_flight_status
+    FROM reservation r
+    JOIN reservation_status rs ON rs.id_reservation_status = r.status_reservation
+    JOIN flight f              ON f.id_flight = r.flight_id_registration
+    JOIN flight_status fs      ON fs.id_flight_status = f.status_flight
+    WHERE r.id_reservation = p_reservation_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Reservation % does not exist.', p_reservation_id;
+    END IF;
+
+    IF v_reservation_status <> 'Confirmed' THEN
+        RAISE EXCEPTION 'Reservation % must be Confirmed to check in (current: %).',
+            p_reservation_id, v_reservation_status;
+    END IF;
+
+    IF v_flight_status NOT IN ('Scheduled', 'Boarding') THEN
+        RAISE EXCEPTION 'Cannot check in: flight status is %.', v_flight_status;
+    END IF;
+
+    SELECT id_reservation_status INTO v_checkedin_id
+    FROM reservation_status
+    WHERE name_reservation_status = 'Checked-in';
+
+    UPDATE reservation
+    SET status_reservation = v_checkedin_id
+    WHERE id_reservation = p_reservation_id;
+END;
+$$;
+
+-- Example:
+CALL sp_checkin_passenger(101);
