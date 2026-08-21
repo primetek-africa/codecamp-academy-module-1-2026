@@ -534,3 +534,56 @@ $$;
 
 -- Example:
 CALL sp_process_refund(96);
+
+-- =====================================================================
+-- 9. sp_update_flight_status
+-- ---------------------------------------------------------------------
+-- Updates a flight's status by name (e.g. 'Boarding', 'Delayed',
+-- 'Cancelled'). Blocks changes to flights already Completed.
+-- =====================================================================
+
+CREATE OR REPLACE PROCEDURE sp_update_flight_status(
+    IN p_flight_id  INT,
+    IN p_new_status VARCHAR
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_current_status VARCHAR(20);
+    v_new_status_id  INT;
+BEGIN
+    IF p_new_status !~ '^[A-Za-z]{3,20}$' THEN
+        RAISE EXCEPTION 'Invalid status name format: %. Letters only, 3-20 characters.',
+            p_new_status;
+    END IF;
+
+    SELECT fs.name_flight_status
+    INTO v_current_status
+    FROM flight f
+    JOIN flight_status fs ON fs.id_flight_status = f.status_flight
+    WHERE f.id_flight = p_flight_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Flight % does not exist.', p_flight_id;
+    END IF;
+
+    IF v_current_status = 'Completed' THEN
+        RAISE EXCEPTION 'Flight % is already Completed and cannot be changed.', p_flight_id;
+    END IF;
+
+    SELECT id_flight_status INTO v_new_status_id
+    FROM flight_status
+    WHERE name_flight_status = p_new_status;
+
+    IF v_new_status_id IS NULL THEN
+        RAISE EXCEPTION 'Unknown flight status: %.', p_new_status;
+    END IF;
+
+    UPDATE flight
+    SET status_flight = v_new_status_id
+    WHERE id_flight = p_flight_id;
+END;
+$$;
+
+-- Example:
+CALL sp_update_flight_status(29, 'Boarding');
