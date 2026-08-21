@@ -484,3 +484,53 @@ $$;
 
 -- Example:
 CALL sp_process_payment(96);
+
+-- =====================================================================
+-- 8. sp_process_refund
+-- ---------------------------------------------------------------------
+-- Refunds a paid ticket and cancels the associated reservation
+-- (unless the passenger has already checked in, which is blocked by
+-- sp_cancel_reservation's own rule).
+-- =====================================================================
+
+CREATE OR REPLACE PROCEDURE sp_process_refund(
+    IN p_ticket_id INT
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_current_status  VARCHAR(20);
+    v_reservation_id  INT;
+    v_refunded_id     INT;
+BEGIN
+    SELECT ps.name_payment_status, t.reservation_id_ticket
+    INTO v_current_status, v_reservation_id
+    FROM ticket t
+    JOIN payment_status ps ON ps.id_payment_status = t.payment_status_ticket
+    WHERE t.id_ticket = p_ticket_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Ticket % does not exist.', p_ticket_id;
+    END IF;
+
+    IF v_current_status <> 'Paid' THEN
+        RAISE EXCEPTION 'Only Paid tickets can be refunded (ticket % is %).',
+            p_ticket_id, v_current_status;
+    END IF;
+
+    SELECT id_payment_status INTO v_refunded_id
+    FROM payment_status
+    WHERE name_payment_status = 'Refunded';
+
+    UPDATE ticket
+    SET payment_status_ticket = v_refunded_id
+    WHERE id_ticket = p_ticket_id;
+
+    -- Reuses the cancellation rules already defined in sp_cancel_reservation
+    -- (e.g. blocks refund-driven cancellation once checked in).
+    CALL sp_cancel_reservation(v_reservation_id);
+END;
+$$;
+
+-- Example:
+CALL sp_process_refund(96);
