@@ -368,3 +368,119 @@ $$;
 
 -- Example:
 CALL sp_checkin_passenger(101);
+
+-- =====================================================================
+-- 6. sp_issue_ticket
+-- ---------------------------------------------------------------------
+-- Issues a ticket for a confirmed (or checked-in) reservation that does
+-- not already have one. Ticket number is auto-generated.
+-- =====================================================================
+
+CREATE OR REPLACE PROCEDURE sp_issue_ticket(
+    IN  p_reservation_id INT,
+    IN  p_price          DECIMAL(10,2),
+    OUT p_ticket_number  VARCHAR
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_reservation_status VARCHAR(20);
+    v_pending_payment_id INT;
+    v_new_ticket_id      INT;
+BEGIN
+    SELECT rs.name_reservation_status
+    INTO v_reservation_status
+    FROM reservation r
+    JOIN reservation_status rs ON rs.id_reservation_status = r.status_reservation
+    WHERE r.id_reservation = p_reservation_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Reservation % does not exist.', p_reservation_id;
+    END IF;
+
+    IF v_reservation_status NOT IN ('Confirmed', 'Checked-in') THEN
+        RAISE EXCEPTION 'Cannot issue ticket: reservation % has status %.',
+            p_reservation_id, v_reservation_status;
+    END IF;
+
+    IF EXISTS (SELECT 1 FROM ticket WHERE reservation_id_ticket = p_reservation_id) THEN
+        RAISE EXCEPTION 'Reservation % already has a ticket issued.', p_reservation_id;
+    END IF;
+
+    IF p_price < 0 THEN
+        RAISE EXCEPTION 'Ticket price cannot be negative.';
+    END IF;
+
+    SELECT id_payment_status INTO v_pending_payment_id
+    FROM payment_status
+    WHERE name_payment_status = 'Pending';
+
+    INSERT INTO ticket (
+        number_ticket, reservation_id_ticket, purchase_date_ticket,
+        price_ticket, payment_status_ticket
+    )
+    VALUES (
+        'TKT-PENDING', p_reservation_id, CURRENT_DATE,
+        p_price, v_pending_payment_id
+    )
+    RETURNING id_ticket INTO v_new_ticket_id;
+
+    -- Generate a readable, zero-padded ticket number from the new id.
+    p_ticket_number := 'TKT-' || LPAD(v_new_ticket_id::TEXT, 4, '0');
+
+    -- Defense in depth: confirm the generated code actually matches the
+    -- system's ticket-number convention before it's persisted.
+    IF p_ticket_number !~ '^TKT-[0-9]{4,}$' THEN
+        RAISE EXCEPTION 'Generated ticket number % does not match expected format.', p_ticket_number;
+    END IF;
+
+    UPDATE ticket
+    SET number_ticket = p_ticket_number
+    WHERE id_ticket = v_new_ticket_id;
+END;
+$$;
+
+-- Example:
+CALL sp_issue_ticket(101, 210.00, NULL);
+
+-- =====================================================================
+-- 7. sp_process_payment
+-- ---------------------------------------------------------------------
+-- Marks a ticket as paid. Only tickets currently Pending can be paid.
+-- =====================================================================
+
+CREATE OR REPLACE PROCEDURE sp_process_payment(
+    IN p_ticket_id INT
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_current_status VARCHAR(20);
+    v_paid_id        INT;
+BEGIN
+    SELECT ps.name_payment_status
+    INTO v_current_status
+    FROM ticket t
+    JOIN payment_status ps ON ps.id_payment_status = t.payment_status_ticket
+    WHERE t.id_ticket = p_ticket_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Ticket % does not exist.', p_ticket_id;
+    END IF;
+
+    IF v_current_status NOT IN ('Pending', 'Failed') THEN
+        RAISE EXCEPTION 'Ticket % cannot be paid from status %.', p_ticket_id, v_current_status;
+    END IF;
+
+    SELECT id_payment_status INTO v_paid_id
+    FROM payment_status
+    WHERE name_payment_status = 'Paid';
+
+    UPDATE ticket
+    SET payment_status_ticket = v_paid_id
+    WHERE id_ticket = p_ticket_id;
+END;
+$$;
+
+-- Example:
+CALL sp_process_payment(96);
