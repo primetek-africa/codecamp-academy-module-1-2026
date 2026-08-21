@@ -221,3 +221,18 @@ BEFORE INSERT OR UPDATE
 ON reservation
 FOR EACH ROW
 EXECUTE FUNCTION fn_validate_flight_capacity();
+
+INSERT INTO reservation (
+    date_reservation,
+    seat_number_reservation,
+    status_reservation,
+    passenger_id_reservation,
+    flight_id_registration
+)
+VALUES (
+    CURRENT_DATE,
+    '30A',
+    1,
+    2,
+    27
+);
