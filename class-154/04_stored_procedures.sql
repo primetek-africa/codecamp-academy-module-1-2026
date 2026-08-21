@@ -268,4 +268,4 @@ END;
 $$;
 
 -- Example:
-CALL sp_confirm_reservation(101);
+CALL sp_confirm_reservation(94);
