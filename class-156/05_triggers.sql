@@ -21,3 +21,26 @@ BEFORE INSERT OR UPDATE
 ON passenger
 FOR EACH ROW
 EXECUTE FUNCTION fn_validate_passenger_age();
+
+INSERT INTO passenger (
+    number_passport_passenger,
+    first_name_passenger,
+    last_name_passenger,
+    date_birth_passenger,
+    gender_passenger,
+    email_passenger,
+    nationality_passenger
+)
+VALUES (
+    'TEST-AGE-002',
+    'John',
+    'Adult',
+    '2024-05-15',
+    1,
+    'john.adult@example.com',
+    1
+);
+
+UPDATE passenger
+SET date_birth_passenger = '2022-05-15'
+WHERE id_passenger = 1;
