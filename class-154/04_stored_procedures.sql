@@ -269,3 +269,51 @@ $$;
 
 -- Example:
 CALL sp_confirm_reservation(94);
+
+-- =====================================================================
+-- 4. sp_cancel_reservation
+-- ---------------------------------------------------------------------
+-- Cancels a reservation. Blocks cancellation once the passenger has
+-- already checked in.
+-- =====================================================================
+
+CREATE OR REPLACE PROCEDURE sp_cancel_reservation(
+    IN p_reservation_id INT
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_current_status  VARCHAR(20);
+    v_cancelled_id    INT;
+BEGIN
+    SELECT rs.name_reservation_status
+    INTO v_current_status
+    FROM reservation r
+    JOIN reservation_status rs ON rs.id_reservation_status = r.status_reservation
+    WHERE r.id_reservation = p_reservation_id;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Reservation % does not exist.', p_reservation_id;
+    END IF;
+
+    IF v_current_status = 'Checked-in' THEN
+        RAISE EXCEPTION 'Reservation % cannot be cancelled: passenger already checked in.',
+            p_reservation_id;
+    END IF;
+
+    IF v_current_status = 'Cancelled' THEN
+        RAISE EXCEPTION 'Reservation % is already cancelled.', p_reservation_id;
+    END IF;
+
+    SELECT id_reservation_status INTO v_cancelled_id
+    FROM reservation_status
+    WHERE name_reservation_status = 'Cancelled';
+
+    UPDATE reservation
+    SET status_reservation = v_cancelled_id
+    WHERE id_reservation = p_reservation_id;
+END;
+$$;
+
+-- Example:
+CALL sp_cancel_reservation(3);
