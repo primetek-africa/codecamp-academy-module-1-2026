@@ -440,3 +440,44 @@ VALUES (
 150.00,
 1
 );
+
+-- =====================================================================
+-- TRIGGER 10
+-- Prevent duplicate phone numbers per passenger
+-- =====================================================================
+CREATE OR REPLACE FUNCTION fn_prevent_duplicate_passenger_phone()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS 
+$$ 
+DECLARE     
+    existing_phone_count    INT; 
+BEGIN     
+    SELECT 
+        COUNT(*)     
+    INTO existing_phone_count     
+    FROM passenger_phone     
+    WHERE id_number_phone = NEW.id_number_phone       
+        AND passenger_number_phone = NEW.passenger_number_phone;      
+    IF existing_phone_count > 0 THEN         
+        RAISE EXCEPTION 'Phone number ID % is already linked to passenger ID %',             
+            NEW.id_number_phone, NEW.passenger_number_phone;     
+    END IF;      
+RETURN NEW; 
+END; 
+$$;
+
+CREATE OR REPLACE TRIGGER trg_prevent_duplicate_passenger_phone
+BEFORE INSERT
+ON passenger_phone
+FOR EACH ROW
+EXECUTE FUNCTION fn_prevent_duplicate_passenger_phone();
+
+INSERT INTO passenger_phone (
+id_number_phone,
+passenger_number_phone
+)
+VALUES (
+11,
+1
+);
