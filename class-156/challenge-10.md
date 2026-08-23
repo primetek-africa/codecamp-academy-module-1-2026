@@ -1,4 +1,4 @@
-# SQL Trigger Challenge: Airline Reservation System
+# SQL Trigger Challenge 10: Airline Reservation System
 
 ## Introduction
 
