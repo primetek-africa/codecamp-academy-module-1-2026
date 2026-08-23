@@ -263,7 +263,9 @@ BEGIN
             'Pilot % is already assigned to a flight during this time', 
                 NEW.pilot_id_flight;     
     END IF;      
-RETURN NEW; END; $$;
+RETURN NEW; 
+END; 
+$$;
 
 CREATE OR REPLACE TRIGGER trg_prevent_pilot_double_booking
 BEFORE INSERT OR UPDATE
@@ -317,7 +319,9 @@ BEGIN
         RAISE EXCEPTION 'Cannot issue a ticket for a % reservation', 
             res_status_name;     
     END IF;      
-RETURN NEW; END; $$;
+RETURN NEW; 
+END; 
+$$;
 
 CREATE OR REPLACE TRIGGER trg_validate_ticket_reservation
 BEFORE INSERT OR UPDATE
@@ -339,3 +343,52 @@ CURRENT_DATE,
 200.00,
 1
 );
+
+-- =====================================================================
+-- TRIGGER 08
+-- Auto-update ticket payment status to 'Refunded' when reservation is cancelled
+-- =====================================================================
+CREATE OR REPLACE FUNCTION fn_auto_refund_cancelled_reservation()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS 
+$$ 
+DECLARE     
+    cancelled_status_id     INT;     
+    refunded_status_id      INT; 
+BEGIN     
+    SELECT 
+        id_reservation_status 
+    INTO cancelled_status_id      
+    FROM reservation_status      
+    WHERE name_reservation_status = 'Cancelled';      
+    
+    SELECT 
+        id_payment_status 
+    INTO refunded_status_id      
+    FROM payment_status      
+    WHERE name_payment_status = 'Refunded';      
+    IF NEW.status_reservation = cancelled_status_id 
+        AND OLD.status_reservation <> cancelled_status_id 
+        THEN         
+            UPDATE ticket         
+            SET payment_status_ticket = refunded_status_id         
+            WHERE reservation_id_ticket = NEW.id_reservation;     
+    END IF;      
+RETURN NEW; 
+END; 
+$$;
+
+CREATE OR REPLACE TRIGGER trg_auto_refund_cancelled_reservation
+AFTER UPDATE OF status_reservation
+ON reservation
+FOR EACH ROW
+EXECUTE FUNCTION fn_auto_refund_cancelled_reservation();
+
+UPDATE reservation
+SET status_reservation = (
+    SELECT id_reservation_status 
+    FROM reservation_status 
+    WHERE name_reservation_status = 'Cancelled'
+)
+WHERE id_reservation = 1;
