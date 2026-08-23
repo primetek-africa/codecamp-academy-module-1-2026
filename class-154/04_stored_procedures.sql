@@ -234,13 +234,13 @@ CALL sp_create_reservation(
 -- Moves a reservation from 'Pending' to 'Confirmed'.
 -- =====================================================================
 CREATE OR REPLACE PROCEDURE sp_confirm_reservation(
-    IN p_reservation_id INT
+    IN p_reservation_id     INT
 )
 LANGUAGE plpgsql
 AS $$
 DECLARE
-    v_current_status VARCHAR(20);
-    v_confirmed_id   INT;
+    v_current_status    VARCHAR(20);
+    v_confirmed_id      INT;
 BEGIN
     SELECT 
         rs.name_reservation_status
@@ -258,7 +258,9 @@ BEGIN
             p_reservation_id, v_current_status;
     END IF;
 
-    SELECT id_reservation_status INTO v_confirmed_id
+    SELECT 
+        id_reservation_status 
+    INTO v_confirmed_id
     FROM reservation_status
     WHERE name_reservation_status = 'Confirmed';
 
@@ -279,10 +281,11 @@ CALL sp_confirm_reservation(94);
 -- =====================================================================
 
 CREATE OR REPLACE PROCEDURE sp_cancel_reservation(
-    IN p_reservation_id INT
+    IN p_reservation_id     INT
 )
 LANGUAGE plpgsql
-AS $$
+AS 
+$$
 DECLARE
     v_current_status  VARCHAR(20);
     v_cancelled_id    INT;
@@ -309,7 +312,8 @@ BEGIN
     END IF;
 
     SELECT 
-        id_reservation_status INTO v_cancelled_id
+        id_reservation_status 
+    INTO v_cancelled_id
     FROM reservation_status
     WHERE name_reservation_status = 'Cancelled';
 
@@ -330,14 +334,15 @@ CALL sp_cancel_reservation(3);
 -- =====================================================================
 
 CREATE OR REPLACE PROCEDURE sp_checkin_passenger(
-    IN p_reservation_id INT
+    IN p_reservation_id     INT
 )
 LANGUAGE plpgsql
-AS $$
+AS 
+$$
 DECLARE
-    v_reservation_status VARCHAR(20);
-    v_flight_status      VARCHAR(20);
-    v_checkedin_id       INT;
+    v_reservation_status    VARCHAR(20);
+    v_flight_status         VARCHAR(20);
+    v_checkedin_id          INT;
 BEGIN
     SELECT 
         rs.name_reservation_status, 
@@ -365,7 +370,9 @@ BEGIN
         RAISE EXCEPTION 'Cannot check in: flight status is %.', v_flight_status;
     END IF;
 
-    SELECT id_reservation_status INTO v_checkedin_id
+    SELECT 
+        id_reservation_status 
+    INTO v_checkedin_id
     FROM reservation_status
     WHERE name_reservation_status = 'Checked-in';
 
@@ -386,16 +393,17 @@ CALL sp_checkin_passenger(101);
 -- =====================================================================
 
 CREATE OR REPLACE PROCEDURE sp_issue_ticket(
-    IN  p_reservation_id INT,
-    IN  p_price          DECIMAL(10,2),
-    OUT p_ticket_number  VARCHAR
+    IN  p_reservation_id    INT,
+    IN  p_price             DECIMAL(10,2),
+    OUT p_ticket_number     VARCHAR
 )
 LANGUAGE plpgsql
-AS $$
+AS 
+$$
 DECLARE
-    v_reservation_status VARCHAR(20);
-    v_pending_payment_id INT;
-    v_new_ticket_id      INT;
+    v_reservation_status    VARCHAR(20);
+    v_pending_payment_id    INT;
+    v_new_ticket_id         INT;
 BEGIN
     SELECT 
         rs.name_reservation_status
@@ -414,8 +422,12 @@ BEGIN
             p_reservation_id, v_reservation_status;
     END IF;
 
-    IF EXISTS (SELECT 1 FROM ticket WHERE reservation_id_ticket = p_reservation_id) THEN
-        RAISE EXCEPTION 'Reservation % already has a ticket issued.', p_reservation_id;
+    IF EXISTS (
+        SELECT 1 
+        FROM ticket 
+        WHERE reservation_id_ticket = p_reservation_id) THEN
+            RAISE EXCEPTION 'Reservation % already has a ticket issued.', 
+                p_reservation_id;
     END IF;
 
     IF p_price < 0 THEN
@@ -450,7 +462,8 @@ BEGIN
     -- Defense in depth: confirm the generated code actually matches the
     -- system's ticket-number convention before it's persisted.
     IF p_ticket_number !~ '^TKT-[0-9]{4,}$' THEN
-        RAISE EXCEPTION 'Generated ticket number % does not match expected format.', p_ticket_number;
+        RAISE EXCEPTION 'Generated ticket number % does not match expected format.', 
+            p_ticket_number;
     END IF;
 
     UPDATE ticket
@@ -469,10 +482,11 @@ CALL sp_issue_ticket(101, 210.00, NULL);
 -- =====================================================================
 
 CREATE OR REPLACE PROCEDURE sp_process_payment(
-    IN p_ticket_id INT
+    IN p_ticket_id      INT
 )
 LANGUAGE plpgsql
-AS $$
+AS 
+$$
 DECLARE
     v_current_status VARCHAR(20);
     v_paid_id        INT;
@@ -490,7 +504,8 @@ BEGIN
     END IF;
 
     IF v_current_status NOT IN ('Pending', 'Failed') THEN
-        RAISE EXCEPTION 'Ticket % cannot be paid from status %.', p_ticket_id, v_current_status;
+        RAISE EXCEPTION 'Ticket % cannot be paid from status %.', 
+            p_ticket_id, v_current_status;
     END IF;
 
     SELECT 
@@ -575,7 +590,8 @@ CREATE OR REPLACE PROCEDURE sp_update_flight_status(
     IN p_new_status VARCHAR
 )
 LANGUAGE plpgsql
-AS $$
+AS 
+$$
 DECLARE
     v_current_status VARCHAR(20);
     v_new_status_id  INT;
@@ -632,12 +648,13 @@ CREATE OR REPLACE PROCEDURE sp_reassign_pilot(
     IN p_new_pilot_id  INT
 )
 LANGUAGE plpgsql
-AS $$
+AS 
+$$
 DECLARE
-    v_departure_date DATE;
-    v_departure_time TIME;
-    v_arrival_time   TIME;
-    v_conflict_count INT;
+    v_departure_date    DATE;
+    v_departure_time    TIME;
+    v_arrival_time      TIME;
+    v_conflict_count    INT;
 BEGIN
     SELECT 
         departure_date_flight, 
@@ -657,7 +674,9 @@ BEGIN
         RAISE EXCEPTION 'Pilot % does not exist.', p_new_pilot_id;
     END IF;
 
-    SELECT COUNT(*) INTO v_conflict_count
+    SELECT 
+        COUNT(*) 
+    INTO v_conflict_count
     FROM flight AS f
     WHERE f.pilot_id_flight = p_new_pilot_id
         AND f.id_flight <> p_flight_id
