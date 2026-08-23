@@ -244,7 +244,9 @@ VALUES (
 CREATE OR REPLACE FUNCTION fn_prevent_pilot_double_booking()
 RETURNS TRIGGER
 LANGUAGE plpgsql
-AS $$ DECLARE     
+AS 
+$$ 
+DECLARE     
     conflict_count      INT;     
 BEGIN     
     SELECT 
@@ -289,5 +291,51 @@ VALUES (
 3,
 1,
 1,
+1
+);
+
+-- =====================================================================
+-- TRIGGER 07
+-- Prevent ticket issuance for cancelled or no-show reservations
+-- =====================================================================
+CREATE OR REPLACE FUNCTION fn_validate_ticket_reservation()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS 
+$$ 
+DECLARE     
+    res_status_name     VARCHAR; 
+BEGIN     
+    SELECT 
+        rs.name_reservation_status     
+    INTO res_status_name     
+    FROM reservation AS r
+    JOIN reservation_status rs 
+        ON rs.id_reservation_status = r.status_reservation     
+    WHERE r.id_reservation = NEW.reservation_id_ticket;      
+    IF res_status_name IN ('Cancelled', 'No-show') THEN         
+        RAISE EXCEPTION 'Cannot issue a ticket for a % reservation', 
+            res_status_name;     
+    END IF;      
+RETURN NEW; END; $$;
+
+CREATE OR REPLACE TRIGGER trg_validate_ticket_reservation
+BEFORE INSERT OR UPDATE
+ON ticket
+FOR EACH ROW
+EXECUTE FUNCTION fn_validate_ticket_reservation();
+
+INSERT INTO ticket (
+number_ticket,
+reservation_id_ticket,
+purchase_date_ticket,
+price_ticket,
+payment_status_ticket
+)
+VALUES (
+'TEST-TKT-INVALID',
+96,
+CURRENT_DATE,
+200.00,
 1
 );
