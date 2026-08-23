@@ -236,3 +236,58 @@ VALUES (
     2,
     27
 );
+
+-- =====================================================================
+-- TRIGGER 06
+-- Prevent double-booking a pilot for overlapping or identical flight times
+-- =====================================================================
+CREATE OR REPLACE FUNCTION fn_prevent_pilot_double_booking()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$ DECLARE     
+    conflict_count      INT;     
+BEGIN     
+    SELECT 
+        COUNT(*)     
+    INTO conflict_count     
+    FROM flight     
+    WHERE pilot_id_flight = NEW.pilot_id_flight       
+        AND departure_date_flight = NEW.departure_date_flight       
+        AND id_flight <> COALESCE(NEW.id_flight, -1)       
+        AND ((NEW.departure_time_flight, NEW.arrival_time_flight)
+            OVERLAPS (departure_time_flight, arrival_time_flight));      
+    IF conflict_count > 0 THEN
+        RAISE EXCEPTION 
+            'Pilot % is already assigned to a flight during this time', 
+                NEW.pilot_id_flight;     
+    END IF;      
+RETURN NEW; END; $$;
+
+CREATE OR REPLACE TRIGGER trg_prevent_pilot_double_booking
+BEFORE INSERT OR UPDATE
+ON flight
+FOR EACH ROW
+EXECUTE FUNCTION fn_prevent_pilot_double_booking();
+
+INSERT INTO flight (
+number_flight,
+departure_date_flight,
+departure_time_flight,
+arrival_time_flight,
+origin_airport_flight,
+destination_airport_flight,
+aircraft_id_flight,
+pilot_id_flight,
+status_flight
+)
+VALUES (
+1,
+'2026-08-01',
+'06:40',
+'07:30',
+1,
+3,
+1,
+1,
+1
+);
