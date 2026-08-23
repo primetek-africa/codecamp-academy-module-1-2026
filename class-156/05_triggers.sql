@@ -392,3 +392,51 @@ SET status_reservation = (
     WHERE name_reservation_status = 'Cancelled'
 )
 WHERE id_reservation = 1;
+
+-- =====================================================================
+-- TRIGGER 09
+-- Validate that ticket purchase date is not later than flight departure date
+-- =====================================================================
+CREATE OR REPLACE FUNCTION fn_validate_ticket_purchase_date()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS 
+$$ 
+DECLARE     
+    flight_departure    DATE; 
+BEGIN     
+    SELECT 
+        f.departure_date_flight     
+    INTO flight_departure     
+    FROM reservation r     
+    JOIN flight f ON f.id_flight = r.flight_id_registration     
+    WHERE r.id_reservation = NEW.reservation_id_ticket;      
+    IF NEW.purchase_date_ticket > flight_departure THEN         
+        RAISE EXCEPTION 
+            'Ticket purchase date (%) cannot be after flight departure date (%)',             
+                NEW.purchase_date_ticket, flight_departure;     
+    END IF;      
+    RETURN NEW; 
+END; 
+$$;
+
+CREATE OR REPLACE TRIGGER trg_validate_ticket_purchase_date
+BEFORE INSERT OR UPDATE
+ON ticket
+FOR EACH ROW
+EXECUTE FUNCTION fn_validate_ticket_purchase_date();
+
+INSERT INTO ticket (
+number_ticket,
+reservation_id_ticket,
+purchase_date_ticket,
+price_ticket,
+payment_status_ticket
+)
+VALUES (
+'TEST-TKT-LATE',
+3,
+'2026-08-05',
+150.00,
+1
+);
