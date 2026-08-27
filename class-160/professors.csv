@@ -1,0 +1,101 @@
+Professor_ID,First_Name,Last_Name,Academic_Rank,Department,Tenure_Status,Salary,Office_Location,Hire_Year
+1001,Sebastian,Montgomery,Associate Professor,Psychology,Non-Tenure Track,109425,Founders Hall Room 391,2011
+1002,Cecilia,Kingsley,Full Professor,Economics,Tenure-Track,103756,Academic Quad B Room 351,2022
+1003,August,Mercer,Full Professor,Mathematics,Tenure-Track,83888,Turing Tower Room 463,2014
+1004,Theodore,Montgomery,Professor Emeritus,Chemistry,Tenure-Track,100735,Academic Quad B Room 266,2018
+1005,Genevieve,Vance,Professor Emeritus,Psychology,Tenured,112295,Turing Tower Room 301,1999
+1006,Sebastian,Montgomery,Assistant Professor,Literature,Tenured,148042,Humanities Hall Room 118,1996
+1007,Silas,Hawthorne,Assistant Professor,Computer Science,Tenured,150999,Academic Quad B Room 272,2000
+1008,Theodore,Barrett,Associate Professor,Psychology,Tenured,82955,Research Complex Room 341,2015
+1009,Theodore,Hayes,Assistant Professor,Mathematics,Tenured,102841,Founders Hall Room 225,1996
+1010,Clara,Montgomery,Full Professor,Computer Science,Non-Tenure Track,135640,Humanities Hall Room 247,2007
+1011,Genevieve,Vance,Professor Emeritus,Biology,Non-Tenure Track,130510,Founders Hall Room 416,2024
+1012,Julian,Hawthorne,Assistant Professor,Psychology,Tenured,99911,Science Center Room 100,2005
+1013,Eleanor,Hayes,Assistant Professor,History,Tenure-Track,124031,Turing Tower Room 447,2005
+1014,Cordelia,Sinclair,Associate Professor,Computer Science,Tenured,153726,Academic Quad B Room 290,2010
+1015,Beatrice,Blackwood,Adjunct Professor,Mathematics,Non-Tenure Track,72357,Founders Hall Room 468,2005
+1016,Eleanor,Barrett,Associate Professor,Physics,Non-Tenure Track,97479,Science Center Room 411,2013
+1017,Arthur,Barrett,Full Professor,Chemistry,Tenure-Track,126476,Science Center Room 216,2009
+1018,Cordelia,Sutherland,Professor Emeritus,Philosophy,Non-Tenure Track,109811,Academic Quad B Room 157,2019
+1019,Cordelia,Prescott,Associate Professor,Economics,Tenured,101208,Founders Hall Room 272,2017
+1020,Jasper,Ramsey,Assistant Professor,Philosophy,Tenure-Track,85150,Research Complex Room 416,2017
+1021,Adelaide,Sinclair,Professor Emeritus,Mathematics,Tenured,136180,Research Complex Room 179,2010
+1022,Evangeline,Dalton,Professor Emeritus,Literature,Tenured,108286,Academic Quad B Room 312,2025
+1023,August,Ellington,Assistant Professor,Literature,Tenure-Track,133450,Turing Tower Room 351,2005
+1024,August,Sterling,Associate Professor,Physics,Tenured,86352,Research Complex Room 263,2016
+1025,Silas,Hawthorne,Assistant Professor,Economics,Non-Tenure Track,120069,Turing Tower Room 246,2010
+1026,Cordelia,Sinclair,Adjunct Professor,History,Tenured,79397,Founders Hall Room 146,2002
+1027,Cecilia,Prescott,Professor Emeritus,Physics,Tenure-Track,106555,Science Center Room 404,1998
+1028,Julian,Barrett,Visiting Professor,Philosophy,Tenure-Track,111959,Academic Quad B Room 242,2002
+1029,Gabriel,Gallagher,Visiting Professor,Physics,Tenure-Track,65728,Science Center Room 472,1998
+1030,Silas,Sterling,Full Professor,Philosophy,Tenured,115517,Academic Quad B Room 473,2018
+1031,Sebastian,Prescott,Assistant Professor,Computer Science,Tenure-Track,131234,Turing Tower Room 243,2019
+1032,Felix,Sinclair,Assistant Professor,Literature,Tenure-Track,104954,Science Center Room 111,1997
+1033,Sebastian,Ramsey,Full Professor,Computer Science,Tenured,112280,Humanities Hall Room 323,1997
+1034,Rosalind,O'Connor,Full Professor,Chemistry,Non-Tenure Track,144459,Academic Quad B Room 255,2021
+1035,Clara,Sutherland,Full Professor,Economics,Tenured,81779,Research Complex Room 107,2023
+1036,Florence,Prescott,Professor Emeritus,History,Tenure-Track,128932,Humanities Hall Room 447,2012
+1037,Rosalind,Thorne,Adjunct Professor,Philosophy,Tenure-Track,137936,Founders Hall Room 189,2023
+1038,Felix,Kingsley,Assistant Professor,History,Tenured,89466,Humanities Hall Room 415,2020
+1039,Eleanor,Kingsley,Professor Emeritus,Philosophy,Non-Tenure Track,101939,Humanities Hall Room 127,2013
+1040,Cecilia,Ellington,Full Professor,Mathematics,Tenure-Track,134896,Founders Hall Room 456,2013
+1041,August,Gallagher,Assistant Professor,Physics,Tenure-Track,100270,Science Center Room 327,2015
+1042,Sebastian,Sinclair,Professor Emeritus,Chemistry,Tenure-Track,124163,Turing Tower Room 244,1999
+1043,Cordelia,Vance,Adjunct Professor,Literature,Tenured,147637,Science Center Room 311,2012
+1044,Genevieve,Vance,Professor Emeritus,Philosophy,Tenure-Track,116934,Research Complex Room 319,2022
+1045,August,Ellington,Adjunct Professor,History,Non-Tenure Track,129895,Research Complex Room 496,2004
+1046,Julian,Prescott,Full Professor,Chemistry,Tenure-Track,97307,Academic Quad B Room 134,2023
+1047,Florence,Blackwood,Adjunct Professor,Biology,Tenure-Track,119098,Research Complex Room 489,2016
+1048,Jasper,Montgomery,Assistant Professor,Biology,Non-Tenure Track,125921,Humanities Hall Room 470,2015
+1049,Clara,Sinclair,Full Professor,Computer Science,Tenure-Track,70486,Research Complex Room 402,2000
+1050,Rosalind,Thorne,Assistant Professor,Literature,Tenured,73335,Science Center Room 109,1995
+1051,Genevieve,Mercer,Visiting Professor,Mathematics,Tenured,151900,Academic Quad B Room 341,1999
+1052,Clara,Blackwood,Associate Professor,History,Tenured,154112,Turing Tower Room 464,2003
+1053,Eleanor,Hawthorne,Adjunct Professor,Physics,Non-Tenure Track,76130,Research Complex Room 218,2006
+1054,Beatrice,Vance,Associate Professor,Physics,Tenure-Track,152508,Science Center Room 473,2020
+1055,Adelaide,Ramsey,Associate Professor,History,Tenured,125566,Science Center Room 245,2008
+1056,Clara,Sutherland,Adjunct Professor,Economics,Non-Tenure Track,131703,Science Center Room 366,1996
+1057,Rosalind,Kingsley,Full Professor,Mathematics,Tenure-Track,92192,Research Complex Room 381,2011
+1058,Cordelia,Barrett,Visiting Professor,Chemistry,Non-Tenure Track,66062,Science Center Room 441,2008
+1059,Eleanor,Blackwood,Assistant Professor,Philosophy,Tenured,149076,Turing Tower Room 382,2020
+1060,Adelaide,Ellington,Professor Emeritus,Economics,Tenured,154780,Science Center Room 197,2007
+1061,Clara,Dalton,Assistant Professor,Philosophy,Tenured,86545,Science Center Room 198,2021
+1062,Florence,Dalton,Professor Emeritus,Philosophy,Non-Tenure Track,86689,Science Center Room 410,2003
+1063,Evangeline,Ellington,Assistant Professor,Economics,Non-Tenure Track,76174,Academic Quad B Room 296,2020
+1064,August,Kingsley,Adjunct Professor,Computer Science,Tenured,153461,Research Complex Room 457,2019
+1065,Genevieve,Sinclair,Visiting Professor,Biology,Non-Tenure Track,74348,Turing Tower Room 122,2009
+1066,Florence,O'Connor,Professor Emeritus,Philosophy,Tenured,88714,Research Complex Room 152,2019
+1067,Genevieve,Montgomery,Full Professor,Economics,Tenured,103102,Research Complex Room 301,2016
+1068,Evangeline,Dalton,Assistant Professor,Economics,Tenure-Track,139460,Humanities Hall Room 182,2009
+1069,Gideon,Hawthorne,Assistant Professor,Psychology,Non-Tenure Track,154930,Science Center Room 184,2018
+1070,Rosalind,Dalton,Professor Emeritus,Computer Science,Tenured,71801,Academic Quad B Room 465,2024
+1071,August,Dalton,Full Professor,Literature,Tenured,137267,Science Center Room 150,2005
+1072,Gideon,Dalton,Full Professor,Psychology,Non-Tenure Track,113136,Research Complex Room 304,2025
+1073,Felix,O'Connor,Adjunct Professor,Psychology,Tenure-Track,88625,Founders Hall Room 468,2010
+1074,August,O'Connor,Adjunct Professor,History,Tenure-Track,147873,Humanities Hall Room 447,2023
+1075,Gideon,Hawthorne,Adjunct Professor,Biology,Tenured,137592,Humanities Hall Room 349,2011
+1076,Arthur,Vance,Adjunct Professor,Economics,Non-Tenure Track,142052,Humanities Hall Room 217,2020
+1077,Sebastian,Vance,Adjunct Professor,Biology,Tenure-Track,109261,Turing Tower Room 478,1998
+1078,Felix,Ramsey,Adjunct Professor,Mathematics,Non-Tenure Track,66542,Humanities Hall Room 367,1995
+1079,Arthur,O'Connor,Visiting Professor,History,Non-Tenure Track,86677,Science Center Room 153,2002
+1080,Cordelia,Kingsley,Full Professor,Literature,Tenured,111732,Founders Hall Room 488,2011
+1081,Genevieve,Thorne,Adjunct Professor,Biology,Tenure-Track,115343,Academic Quad B Room 321,1997
+1082,Theodore,Sterling,Full Professor,Physics,Tenured,104081,Turing Tower Room 412,2023
+1083,Silas,Gallagher,Full Professor,Philosophy,Tenure-Track,127856,Science Center Room 211,2014
+1084,Jasper,Dalton,Associate Professor,Mathematics,Tenure-Track,158105,Research Complex Room 440,2009
+1085,Genevieve,Thorne,Visiting Professor,Computer Science,Tenure-Track,153858,Academic Quad B Room 165,2009
+1086,Julian,Hawthorne,Adjunct Professor,Literature,Tenure-Track,84065,Turing Tower Room 202,2025
+1087,Julian,Ellington,Assistant Professor,Mathematics,Tenure-Track,148460,Academic Quad B Room 291,2018
+1088,Arthur,O'Connor,Professor Emeritus,Philosophy,Non-Tenure Track,153092,Founders Hall Room 325,2016
+1089,Gabriel,Thorne,Assistant Professor,History,Tenured,119693,Academic Quad B Room 405,2008
+1090,Adelaide,Gallagher,Visiting Professor,Philosophy,Non-Tenure Track,91962,Humanities Hall Room 437,2020
+1091,Sebastian,Winslow,Professor Emeritus,Psychology,Tenure-Track,93295,Academic Quad B Room 434,2022
+1092,Felix,Winslow,Visiting Professor,Philosophy,Tenured,78807,Turing Tower Room 407,2017
+1093,Sebastian,Vance,Full Professor,Psychology,Tenure-Track,107348,Science Center Room 265,2008
+1094,Felix,Blackwood,Professor Emeritus,History,Tenured,91432,Science Center Room 434,2018
+1095,Genevieve,Thorne,Full Professor,Chemistry,Non-Tenure Track,148285,Founders Hall Room 129,1996
+1096,Cordelia,Winslow,Assistant Professor,Psychology,Tenured,156792,Humanities Hall Room 150,2007
+1097,Eleanor,Montgomery,Assistant Professor,Computer Science,Tenured,122854,Science Center Room 232,2020
+1098,Arthur,Ellington,Professor Emeritus,Philosophy,Tenured,105262,Research Complex Room 487,2008
+1099,Evangeline,Sterling,Professor Emeritus,Philosophy,Tenured,102080,Humanities Hall Room 283,2021
+1100,Gabriel,Ramsey,Adjunct Professor,Computer Science,Tenured,66324,Science Center Room 429,2018
