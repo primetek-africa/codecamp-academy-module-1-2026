@@ -1,4 +1,4 @@
-# MongoDB Compass Code Challenge
+# MongoDB Compass Code Challenge 2
 
 ## Student Collection: Filter Queries
 
