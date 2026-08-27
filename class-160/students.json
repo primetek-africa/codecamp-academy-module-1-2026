@@ -1,0 +1,147 @@
+[
+    {
+        "_id": { "$oid": "6a8ef12bc45cb41e8be43f23" },
+        "studentId": "STU-006",
+        "firstName": "Elena",
+        "lastName": "Rousseau",
+        "email": "elena.rousseau@email.com",
+        "age": 22,
+        "address": { "street": "Rue de Rivoli 45", "city": "Paris", "country": "France" },
+        "phones": [
+            { "type": "mobile", "number": "+33 6 12 34 56 78" },
+            { "type": "home", "number": "+33 1 42 68 55 00" }
+        ],
+        "program": "Software Engineering",
+        "enrollments": [ { "grade": 4.8, "status": "Completed" } ]
+    },
+    {
+        "_id": { "$oid": "6a8ef13ec45cb41e8be43f24" },
+        "studentId": "STU-007",
+        "firstName": "Lukas",
+        "lastName": "Weber",
+        "email": "lukas.weber@email.de",
+        "age": 24,
+        "address": { "street": "Friedrichstraße 102", "city": "Berlin", "country": "Germany" },
+        "phones": [
+            { "type": "mobile", "number": "+49 171 2345678" }
+        ],
+        "program": "Cybersecurity",
+        "enrollments": [ { "grade": 3.8, "status": "In Progress" } ]
+    },
+    {
+        "_id": { "$oid": "6a8ef147c45cb41e8be43f25" },
+        "studentId": "STU-008",
+        "firstName": "Sofia",
+        "lastName": "Gomez",
+        "email": "sofia.gomez@email.es",
+        "age": 20,
+        "address": { "street": "Avinguda Diagonal 512", "city": "Barcelona", "country": "Spain" },
+        "phones": [
+            { "type": "mobile", "number": "+34 611 223 344" },
+            { "type": "home", "number": "+34 934 123 456" }
+        ],
+        "program": "UI/UX Design",
+        "enrollments": [ { "grade": 4.2, "status": "Completed" } ]
+    },
+    {
+        "_id": { "$oid": "6a8ef15ac45cb41e8be43f26" },
+        "studentId": "STU-009",
+        "firstName": "Aarav",
+        "lastName": "Patel",
+        "email": "aarav.patel@email.com",
+        "age": 25,
+        "address": { "street": "MG Road 88", "city": "Bangalore", "country": "India" },
+        "phones": [
+            { "type": "mobile", "number": "+91 98765 43210" }
+        ],
+        "program": "Cloud Computing",
+        "enrollments": [ { "grade": 4.0, "status": "Completed" } ]
+    },
+    {
+        "_id": { "$oid": "6a8ef161c45cb41e8be43f27" },
+        "studentId": "STU-010",
+        "firstName": "Yuki",
+        "lastName": "Tanaka",
+        "email": "yuki.tanaka@email.jp",
+        "age": 21,
+        "address": { "street": "Shibuya 3-14-1", "city": "Tokyo", "country": "Japan" },
+        "phones": [
+            { "type": "mobile", "number": "+81 90 1234 5678" },
+            { "type": "home", "number": "+81 3 5791 1234" }
+        ],
+        "program": "Artificial Intelligence",
+        "enrollments": [ { "grade": 4.9, "status": "Completed" } ]
+    },
+    {
+        "_id": { "$oid": "6a8ef178c45cb41e8be43f28" },
+        "studentId": "STU-011",
+        "firstName": "Mateo",
+        "lastName": "Silva",
+        "email": "mateo.silva@email.br",
+        "age": 23,
+        "address": { "street": "Av. Paulista 1500", "city": "São Paulo", "country": "Brazil" },
+        "phones": [
+            { "type": "mobile", "number": "+55 11 98765 4321" }
+        ],
+        "program": "Data Analytics",
+        "enrollments": [ { "grade": 3.2, "status": "In Progress" } ]
+    },
+    {
+        "_id": { "$oid": "6a8ef18bc45cb41e8be43f29" },
+        "studentId": "STU-012",
+        "firstName": "Chloe",
+        "lastName": "Dubois",
+        "email": "chloe.dubois@email.ca",
+        "age": 22,
+        "address": { "street": "St Catherine St 304", "city": "Montreal", "country": "Canada" },
+        "phones": [
+            { "type": "mobile", "number": "+1 514 555 0192" },
+            { "type": "home", "number": "+1 514 555 0144" }
+        ],
+        "program": "Full Stack Web Development",
+        "enrollments": [ { "grade": 4.6, "status": "Completed" } ]
+    },
+    {
+        "_id": { "$oid": "6a8ef194c45cb41e8be43f2a" },
+        "studentId": "STU-013",
+        "firstName": "Liam",
+        "lastName": "O'Connor",
+        "email": "liam.oconnor@email.ie",
+        "age": 26,
+        "address": { "street": "Grafton Street 12", "city": "Dublin", "country": "Ireland" },
+        "phones": [
+            { "type": "mobile", "number": "+353 87 123 4567" }
+        ],
+        "program": "DevOps Engineering",
+        "enrollments": [ { "grade": 3.9, "status": "Completed" } ]
+    },
+    {
+        "_id": { "$oid": "6a8ef1a7c45cb41e8be43f2b" },
+        "studentId": "STU-014",
+        "firstName": "Amira",
+        "lastName": "El-Sayed",
+        "email": "amira.elsayed@email.eg",
+        "age": 20,
+        "address": { "street": "Tahrir Square 5", "city": "Cairo", "country": "Egypt" },
+        "phones": [
+            { "type": "mobile", "number": "+20 100 123 4567" },
+            { "type": "home", "number": "+20 2 2794 0000" }
+        ],
+        "program": "Data Science",
+        "enrollments": [ { "grade": 4.1, "status": "In Progress" } ]
+    },
+    {
+        "_id": { "$oid": "6a8ef1b2c45cb41e8be43f2c" },
+        "studentId": "STU-015",
+        "firstName": "Oliver",
+        "lastName": "Taylor",
+        "email": "oliver.taylor@email.co.uk",
+        "age": 24,
+        "address": { "street": "Oxford Street 89", "city": "London", "country": "United Kingdom" },
+        "phones": [
+            { "type": "mobile", "number": "+44 7911 123456" }
+        ],
+        "program": "Mobile Development",
+        "enrollments": [ { "grade": 4.4, "status": "Completed" } ]
+    }
+]
