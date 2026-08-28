@@ -1,6 +1,6 @@
-# MongoDB Compass Code Challenge — Solutions
+# MongoDB Compass Code Challenge 2 — Solutions
 
-## Challenge 2 — Students in Selected Programs
+## Challenge 1 — Students in Selected Programs
 
 Find students enrolled in Cybersecurity, Artificial Intelligence, or Data Science.
 
