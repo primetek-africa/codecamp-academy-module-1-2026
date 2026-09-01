@@ -97,7 +97,7 @@ Retrieve customers whose country is either "Brazil" or "Canada".
 Retrieve all customers whose country is not "Brazil".
 
 **Query 07 — Accounts With High Limits**
-Find all accounts whose limit is greater than 10000.
+Find all accounts whose limit is greater than 9000.
 
 **Query 08 — Accounts Within a Range**
 Find accounts whose limit is greater than or equal to 5000 and less than or equal to 10000.

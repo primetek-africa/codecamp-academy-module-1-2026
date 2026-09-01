@@ -43,4 +43,39 @@ db.customers.find({
 // Query 05 — Customers From Multiple Countries
 // Retrieve customers whose country is either "Brazil" or "Canada".
 // -------------------------------------------------------------------
-db.customers.find({ country: { $in: ["Brazil", "Canada"] } });
+//db.customers.find({ country: { $in: ["Brazil", "Canada"] } });
+
+// -------------------------------------------------------------------
+// Query 06 — Customers Excluding a Country
+// Retrieve all customers whose country is not "Brazil".
+// -------------------------------------------------------------------
+//db.customers.find({ country: { $ne: "Brazil" } });
+
+// -------------------------------------------------------------------
+// Query 07 — Accounts With High Limits
+// Find all accounts whose limit is greater than 9000.
+// -------------------------------------------------------------------
+//db.accounts.find({ limit: { $gt: 9000 } });
+//db.accounts.find({ limit: { $gt: 9000 } }).count();
+
+// -------------------------------------------------------------------
+// Query 08 — Accounts Within a Range
+// Find accounts whose limit is between 5000 and 10000, inclusive.
+// -------------------------------------------------------------------
+//db.accounts.find({ limit: { $gte: 5000, $lte: 10000 } });
+//db.accounts.find({ limit: { $gte: 5000, $lte: 10000 } }).count();
+
+// -------------------------------------------------------------------
+// Query 09 — Accounts With Specific Products
+// Find accounts whose products array contains "InvestmentStock".
+// -------------------------------------------------------------------
+//db.accounts.find({ products: "InvestmentStock" });
+//db.accounts.find({ products: "InvestmentStock" }).count();
+
+// -------------------------------------------------------------------
+// Query 10 — Accounts With Multiple Products
+// Find accounts that contain BOTH "InvestmentStock" and "Commodity".
+// $all requires every listed value to be present in the array.
+// -------------------------------------------------------------------
+db.accounts.find({ products: { $all: ["InvestmentStock", "Commodity"] } });
+db.accounts.find({ products: { $all: ["InvestmentStock", "Commodity"] } }).count();
