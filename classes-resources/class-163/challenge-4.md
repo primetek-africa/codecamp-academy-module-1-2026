@@ -1,4 +1,4 @@
-# MongoDB Atlas Intermediate Query Activity
+# Code challenge 4: MongoDB Atlas Intermediate Query Activity
 ## Sample Analytics Database
 
 ### Activity Overview
