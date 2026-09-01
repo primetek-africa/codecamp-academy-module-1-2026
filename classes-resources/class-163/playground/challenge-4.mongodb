@@ -1,0 +1,46 @@
+// ===================================================================
+// MongoDB Atlas Intermediate Query Activity — sample_analytics
+// ===================================================================
+
+// Connect to the database
+use("sample_analytics");
+
+// -------------------------------------------------------------------
+// Query 01 - Find All Customers
+// Retrieve all documents from the customers collection.
+// ------------------------------------------------------------------
+//db.customers.find({});
+
+// -------------------------------------------------------------------
+// Query 02 — Customers From a Specific Country
+// Retrieve all customers whose country is "Brazil".
+// ------------------------------------------------------------------
+//db.customers.find({ country: "Brazil" }); // Does not exists this attribute
+
+// -------------------------------------------------------------------
+// Query 03 — Customers With Multiple Accounts
+// Find customers who have more than one account.
+// $expr lets us compare the size of the accounts array using an
+// aggregation-style expression inside a normal find().
+// -------------------------------------------------------------------
+/*
+db.customers.find({
+    $expr: { $gt: [{ $size: "$accounts" }, 1] },
+});
+
+db.customers.find({
+    $expr: { $gt: [{ $size: "$accounts" }, 1] },
+}).count();
+*/
+
+// -------------------------------------------------------------------
+// Query 04 — Customers With a Specific Account
+// Find customers whose accounts array contains the account number 371138.
+// -------------------------------------------------------------------
+//db.customers.find({ accounts: 371138 });
+
+// -------------------------------------------------------------------
+// Query 05 — Customers From Multiple Countries
+// Retrieve customers whose country is either "Brazil" or "Canada".
+// -------------------------------------------------------------------
+db.customers.find({ country: { $in: ["Brazil", "Canada"] } });
