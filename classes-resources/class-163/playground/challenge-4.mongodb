@@ -9,13 +9,13 @@ use("sample_analytics");
 // Query 01 - Find All Customers
 // Retrieve all documents from the customers collection.
 // ------------------------------------------------------------------
-//db.customers.find({});
+db.customers.find({});
 
 // -------------------------------------------------------------------
 // Query 02 — Customers From a Specific Country
 // Retrieve all customers whose country is "Brazil".
 // ------------------------------------------------------------------
-//db.customers.find({ country: "Brazil" }); // Does not exists this attribute
+db.customers.find({ country: "Brazil" });
 
 // -------------------------------------------------------------------
 // Query 03 — Customers With Multiple Accounts
@@ -23,7 +23,6 @@ use("sample_analytics");
 // $expr lets us compare the size of the accounts array using an
 // aggregation-style expression inside a normal find().
 // -------------------------------------------------------------------
-/*
 db.customers.find({
     $expr: { $gt: [{ $size: "$accounts" }, 1] },
 });
@@ -31,46 +30,45 @@ db.customers.find({
 db.customers.find({
     $expr: { $gt: [{ $size: "$accounts" }, 1] },
 }).count();
-*/
 
 // -------------------------------------------------------------------
 // Query 04 — Customers With a Specific Account
 // Find customers whose accounts array contains the account number 371138.
 // -------------------------------------------------------------------
-//db.customers.find({ accounts: 371138 });
+db.customers.find({ accounts: 371138 });
 
 // -------------------------------------------------------------------
 // Query 05 — Customers From Multiple Countries
 // Retrieve customers whose country is either "Brazil" or "Canada".
 // -------------------------------------------------------------------
-//db.customers.find({ country: { $in: ["Brazil", "Canada"] } });
+db.customers.find({ country: { $in: ["Brazil", "Canada"] } });
 
 // -------------------------------------------------------------------
 // Query 06 — Customers Excluding a Country
 // Retrieve all customers whose country is not "Brazil".
 // -------------------------------------------------------------------
-//db.customers.find({ country: { $ne: "Brazil" } });
+db.customers.find({ country: { $ne: "Brazil" } });
 
 // -------------------------------------------------------------------
 // Query 07 — Accounts With High Limits
 // Find all accounts whose limit is greater than 9000.
 // -------------------------------------------------------------------
-//db.accounts.find({ limit: { $gt: 9000 } });
-//db.accounts.find({ limit: { $gt: 9000 } }).count();
+db.accounts.find({ limit: { $gt: 9000 } });
+db.accounts.find({ limit: { $gt: 9000 } }).count();
 
 // -------------------------------------------------------------------
 // Query 08 — Accounts Within a Range
 // Find accounts whose limit is between 5000 and 10000, inclusive.
 // -------------------------------------------------------------------
-//db.accounts.find({ limit: { $gte: 5000, $lte: 10000 } });
-//db.accounts.find({ limit: { $gte: 5000, $lte: 10000 } }).count();
+db.accounts.find({ limit: { $gte: 5000, $lte: 10000 } });
+db.accounts.find({ limit: { $gte: 5000, $lte: 10000 } }).count();
 
 // -------------------------------------------------------------------
 // Query 09 — Accounts With Specific Products
 // Find accounts whose products array contains "InvestmentStock".
 // -------------------------------------------------------------------
-//db.accounts.find({ products: "InvestmentStock" });
-//db.accounts.find({ products: "InvestmentStock" }).count();
+db.accounts.find({ products: "InvestmentStock" });
+db.accounts.find({ products: "InvestmentStock" }).count();
 
 // -------------------------------------------------------------------
 // Query 10 — Accounts With Multiple Products
