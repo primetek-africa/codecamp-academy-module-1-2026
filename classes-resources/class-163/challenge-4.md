@@ -17,7 +17,7 @@ progressively during class, applying the MongoDB concepts covered in previous le
 
 By completing this activity, students will practice how to:
 
-- Connect a Node.js project in VS Code to MongoDB Atlas.
+- Connect MongoDB Atlas Cluster in VS Code.
 - Select and work with the `sample_analytics` database.
 - Explore MongoDB collections and documents.
 - Use `find()` to retrieve documents.
@@ -202,13 +202,3 @@ Query 20
 - Result:
 - Explanation:
 ```
-
----
-
-### Challenge
-
-Students who finish all 20 queries before the end of the activity should modify 
-at least five queries to produce a different but logically related result.
-
-The objective is to demonstrate that they understand the MongoDB operators rather 
-than simply reproducing the original queries.
