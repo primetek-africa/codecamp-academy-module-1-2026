@@ -77,3 +77,96 @@ db.accounts.find({ products: "InvestmentStock" }).count();
 // -------------------------------------------------------------------
 db.accounts.find({ products: { $all: ["InvestmentStock", "Commodity"] } });
 db.accounts.find({ products: { $all: ["InvestmentStock", "Commodity"] } }).count();
+
+// -------------------------------------------------------------------
+// Query 11 — Sort Accounts by Limit
+// Retrieve all accounts sorted by limit, highest to lowest.
+// -------------------------------------------------------------------
+db.accounts.find({}).sort({ limit: -1 });
+
+// -------------------------------------------------------------------
+// Query 12 — Top Five Accounts
+// Retrieve the five accounts with the highest limit.
+// -------------------------------------------------------------------
+db.accounts.find({}).sort({ limit: -1 }).limit(5);
+
+// -------------------------------------------------------------------
+// Query 13 — Project Customer Information
+// Return only name, username, email, country. Exclude _id.
+// -------------------------------------------------------------------
+db.customers.find(
+    {},
+    {
+        _id: 0,
+        name: 1,
+        username: 1,
+        email: 1,
+        country: 1,
+    }
+);
+
+// -------------------------------------------------------------------
+// Query 14 — Search by Email Domain
+// Find customers whose email contains "@gmail.com".
+// The "." is escaped with "\\." so it's treated as a literal dot
+// rather than the regex "any character" wildcard.
+// -------------------------------------------------------------------
+db.customers.find({ email: { $regex: "@gmail\\.com", $options: "i" } });
+
+// -------------------------------------------------------------------
+// Query 15 — Accounts With Specific Products (using $in)
+// Find accounts that contain EITHER "InvestmentStock" OR "Brokerage".
+// -------------------------------------------------------------------
+db.accounts.find({ products: { $in: ["InvestmentStock", "Brokerage"] } });
+
+// -------------------------------------------------------------------
+// Query 16 — Customers With Multiple Conditions
+// From "Brazil" AND with at least one account number greater than 100000.
+// $elemMatch checks that a single array element satisfies the condition.
+// -------------------------------------------------------------------
+db.customers.find({
+    $and: [
+        { country: "Brazil" },
+        { accounts: { $elemMatch: { $gt: 100000 } } },
+    ],
+});
+
+// -------------------------------------------------------------------
+// Query 17 — Update a Customer
+// Find one customer by username and update their email with $set.
+// Replace "someusername" / the new email with real values before running.
+// -------------------------------------------------------------------
+db.customers.updateOne(
+    { username: "matthewray" },
+    { $set: { email: "matthewray1232@mail.com" } }
+);
+
+// -------------------------------------------------------------------
+// Query 18 — Add a Product to an Account
+// Find an account by account_id and push "NewProduct" into its
+// products array. Replace the account number with a real one.
+// -------------------------------------------------------------------
+db.accounts.updateOne(
+    { account_id: 371138 },
+    { $push: { products: "NewProduct" } }
+);
+
+// -------------------------------------------------------------------
+// Query 19 — Delete an Account
+// Find an account with a specific account_id and delete that document.
+// Replace with a real account number before running — this is destructive.
+// -------------------------------------------------------------------
+db.accounts.deleteOne({ account_id: 999999 });
+
+// -------------------------------------------------------------------
+// Query 20 — Combined Analysis Query
+// limit > 5000 AND products contains "InvestmentStock",
+// projected to account_id / limit / products, sorted by limit desc,
+// top 5 results only.
+// -------------------------------------------------------------------
+db.accounts.find(
+    { limit: { $gt: 5000 }, products: "InvestmentStock" },
+    { _id: 0, account_id: 1, limit: 1, products: 1 }
+)
+.sort({ limit: -1 })
+.limit(5);
