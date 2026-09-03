@@ -1,0 +1,25 @@
+// ===================================================================
+// Collaborative MongoDB Atlas Project  — prime_delivery
+// ===================================================================
+
+// Connect to the database
+use("prime_delivery");
+
+// -------------------------------------------------------------------
+// 01 - Register a new Customer
+db.customers.insertOne(
+    {
+        firstName: "Cristian Camilo",
+        lastName: "Cortes Ortiz",
+        email: "cristianco9@spacex.com",
+        phone: "+57 300 234 5465",
+        active: true,
+        createdAt: new Date()
+    }
+);
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+// 02 - Retrieve all of the Customers
+db.customers.find();
+// -------------------------------------------------------------------
