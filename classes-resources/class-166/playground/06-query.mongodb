@@ -1,0 +1,16 @@
+/*
+-------------------------------------------------------------------
+Query 06 - Available Drivers
+Find drivers whose status is either:
+    - available
+    or:
+    - on_delivery
+-------------------------------------------------------------------
+*/
+use("prime_delivery");
+
+db.drivers.find({
+    status: {
+        $in: ["available", "on_delivery"]
+    }
+});
