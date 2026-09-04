@@ -1,0 +1,15 @@
+/*
+-------------------------------------------------------------------
+Query 04 - Orders With Multiple Statuses
+Find all orders whose status is either:
+    - delivered
+    - delayed
+-------------------------------------------------------------------
+*/
+use("prime_delivery");
+
+db.orders.find({
+    status: { 
+        $in: ["delivered", "delayed"]
+    }
+});

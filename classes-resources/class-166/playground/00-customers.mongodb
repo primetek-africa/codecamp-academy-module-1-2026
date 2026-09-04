@@ -1,0 +1,2 @@
+use("prime_delivery");
+db.customers.find();
