@@ -1,6 +1,6 @@
 /*
 -------------------------------------------------------------------
-Query 11 - Unsuccessful Payments
+Query 12 - Unsuccessful Payments
 Find payments whose status is either:
     - pending
     or

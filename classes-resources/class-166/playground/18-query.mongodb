@@ -1,6 +1,6 @@
 /*
 -------------------------------------------------------------------
-Query 17 - Complex Order Filter
+Query 18 - Complex Order Filter
 Find orders that satisfy all of the following conditions:
     - Priority is express.
     - Total amount is greater than 80.

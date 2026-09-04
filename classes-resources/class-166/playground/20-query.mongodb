@@ -1,0 +1,37 @@
+/*
+-------------------------------------------------------------------
+Query 20 - Prime Delivery Operations Report
+Create a query that finds orders satisfying all of the following:
+    - The total amount is greater than 60.
+    - The priority is either standard or express.
+    - The status is not cancelled.
+    - The order was created after August 20, 2026.
+-------------------------------------------------------------------
+*/
+use("prime_delivery");
+
+db.orders.find({ 
+    totalAmount: { 
+        $gt: 60 
+    }, 
+    priority: { 
+        $in: ["standard", "express"] 
+    }, 
+    status: { 
+        $ne: "cancelled" 
+    }, 
+    createdAt: { 
+        $gt: ISODate("2026-08-20T00:00:00Z") 
+    } 
+}, 
+{ 
+    _id: 0, 
+    orderNumber: 1, 
+    customerEmail: 1, 
+    status: 1, 
+    priority: 1, 
+    totalAmount: 1, 
+    createdAt: 1 
+}).sort({ 
+    totalAmount: -1 
+});

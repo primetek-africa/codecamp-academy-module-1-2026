@@ -1,0 +1,41 @@
+/*
+-------------------------------------------------------------------
+Query 19 - Complex Package Filter
+Find packages that satisfy either of these conditions:
+
+Condition A
+
+The package is fragile and weighs more than 5 kg.
+
+Condition B
+
+The package belongs to the electronics category and weighs less than 2 kg.
+
+-------------------------------------------------------------------
+*/
+use("prime_delivery");
+
+db.packages.find({ 
+    $or: [ 
+        { 
+            fragile: true, 
+            weightKg: { 
+                $gt: 5 
+            } 
+        }, 
+        { 
+            category: "electronics", 
+            weightKg: { 
+                $lt: 2 
+            } 
+        } 
+    ] 
+}, 
+{ 
+    _id: 0, 
+    trackingNumber: 1, 
+    description: 1, 
+    category: 1, 
+    weightKg: 1, 
+    fragile: 1 
+});
