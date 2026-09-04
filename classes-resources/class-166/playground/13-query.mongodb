@@ -1,0 +1,24 @@
+/*
+-------------------------------------------------------------------
+Query 13 - Orders Created During a Date Range
+Find all orders created between:
+    - 2026-08-21
+    and
+    - 2026-08-24
+-------------------------------------------------------------------
+*/
+use("prime_delivery");
+
+db.orders.find({ 
+    createdAt: { 
+        $gte: ISODate("2026-08-21T00:00:00Z"), 
+        $lte: ISODate("2026-08-24T23:59:59Z") 
+    } 
+}, { 
+    _id: 0, 
+    orderNumber: 1, 
+    customerEmail: 1, 
+    createdAt: 1, 
+    status: 1 
+    } 
+);

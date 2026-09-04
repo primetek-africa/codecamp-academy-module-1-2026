@@ -1,0 +1,22 @@
+/*
+-------------------------------------------------------------------
+Query 16 - Orders That Are Not Cancelled
+Find all orders whose status is not:
+    - cancelled
+-------------------------------------------------------------------
+*/
+use("prime_delivery");
+
+db.orders.find({ 
+    status: { 
+        $ne: "cancelled" 
+    } 
+}, 
+{ 
+    _id: 0, 
+    orderNumber: 1, 
+    status: 1, 
+    totalAmount: 1 
+}).sort({ 
+    totalAmount: -1 
+});

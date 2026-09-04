@@ -1,0 +1,25 @@
+/*
+-------------------------------------------------------------------
+Query 15 - Packages Outside the Standard Weight
+Find packages whose weight is:
+    - Less than 2 kg.
+    or
+    - greater than 8 kg.
+-------------------------------------------------------------------
+*/
+use("prime_delivery");
+
+db.packages.find({ 
+    $or: [ 
+        { 
+            weightKg: { 
+                $lt: 2 
+            } 
+        }, 
+        { 
+            weightKg: { 
+                $gt: 8 
+            } 
+        } 
+    ] 
+});
