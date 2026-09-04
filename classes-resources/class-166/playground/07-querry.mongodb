@@ -1,0 +1,16 @@
+/*
+-------------------------------------------------------------------
+Query 07 - Highly Rated Drivers
+Find drivers whose rating is greater than or equal to 4.7.
+Sort the results from the highest rating to the lowest rating.
+-------------------------------------------------------------------
+*/
+use("prime_delivery");
+
+db.drivers.find({
+    rating: {
+        $gte: 4.7
+    }
+}).sort({
+    rating: -1
+});

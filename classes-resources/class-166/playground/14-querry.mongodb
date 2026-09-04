@@ -1,0 +1,14 @@
+/*
+-------------------------------------------------------------------
+Query 14 - Find customers whose first name is either:
+    -Maria
+    -Laura
+-------------------------------------------------------------------
+*/
+
+use("prime_delivery");
+db.customers.find(
+  {
+    firstName: { $in: ["Maria", "Laura"] }
+  }
+)

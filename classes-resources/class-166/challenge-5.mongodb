@@ -1,0 +1,201 @@
+// Connect to the database
+use("prime_delivery");
+// ===================================================================
+//Packages
+db.packages.insertMany([
+  {
+    trackingNumber: "PKG-1001",
+    orderNumber: "ORD-1001",
+    description: "Laptop accessories",
+    weightKg: 4.5,
+    category: "electronics",
+    fragile: true,
+    dimensions: {
+      lengthCm: 40,
+      widthCm: 30,
+      heightCm: 15
+    }
+  },
+  {
+    trackingNumber: "PKG-1002",
+    orderNumber: "ORD-1001",
+    description: "Office supplies",
+    weightKg: 2.0,
+    category: "office",
+    fragile: false,
+    dimensions: {
+      lengthCm: 35,
+      widthCm: 25,
+      heightCm: 20
+    }
+  },
+  {
+    trackingNumber: "PKG-1003",
+    orderNumber: "ORD-1002",
+    description: "Smartphone",
+    weightKg: 0.8,
+    category: "electronics",
+    fragile: true,
+    dimensions: {
+      lengthCm: 20,
+      widthCm: 12,
+      heightCm: 8
+    }
+  },
+  {
+    trackingNumber: "PKG-1004",
+    orderNumber: "ORD-1003",
+    description: "Clothing",
+    weightKg: 3.2,
+    category: "fashion",
+    fragile: false,
+    dimensions: {
+      lengthCm: 45,
+      widthCm: 35,
+      heightCm: 15
+    }
+  },
+  {
+    trackingNumber: "PKG-1005",
+    orderNumber: "ORD-1004",
+    description: "Kitchen equipment",
+    weightKg: 7.5,
+    category: "home",
+    fragile: true,
+    dimensions: {
+      lengthCm: 50,
+      widthCm: 40,
+      heightCm: 30
+    }
+  },
+  {
+    trackingNumber: "PKG-1006",
+    orderNumber: "ORD-1005",
+    description: "Computer monitor",
+    weightKg: 6.8,
+    category: "electronics",
+    fragile: true,
+    dimensions: {
+      lengthCm: 60,
+      widthCm: 45,
+      heightCm: 20
+    }
+  },
+  {
+    trackingNumber: "PKG-1007",
+    orderNumber: "ORD-1006",
+    description: "Books",
+    weightKg: 8.5,
+    category: "books",
+    fragile: false,
+    dimensions: {
+      lengthCm: 45,
+      widthCm: 35,
+      heightCm: 25
+    }
+  },
+  {
+    trackingNumber: "PKG-1008",
+    orderNumber: "ORD-1007",
+    description: "Camera equipment",
+    weightKg: 5.2,
+    category: "electronics",
+    fragile: true,
+    dimensions: {
+      lengthCm: 40,
+      widthCm: 35,
+      heightCm: 25
+    }
+  },
+  {
+    trackingNumber: "PKG-1009",
+    orderNumber: "ORD-1008",
+    description: "Sports equipment",
+    weightKg: 9.5,
+    category: "sports",
+    fragile: false,
+    dimensions: {
+      lengthCm: 70,
+      widthCm: 30,
+      heightCm: 25
+    }
+  }
+])
+// ===================================================================
+//Delivery Events
+use("prime_delivery");
+db.delivery_events.insertMany([
+  {
+    orderNumber: "ORD-1001",
+    status: "picked_up",
+    location: "Central Warehouse",
+    timestamp: ISODate("2026-08-20T10:00:00Z")
+  },
+  {
+    orderNumber: "ORD-1001",
+    status: "delivered",
+    location: "Customer Address 01",
+    timestamp: ISODate("2026-08-20T15:30:00Z")
+  },
+  {
+    orderNumber: "ORD-1002",
+    status: "picked_up",
+    location: "Central Warehouse",
+    timestamp: ISODate("2026-08-21T11:00:00Z")
+  },
+  {
+    orderNumber: "ORD-1002",
+    status: "in_transit",
+    location: "Cali",
+    timestamp: ISODate("2026-08-21T13:00:00Z")
+  },
+  {
+    orderNumber: "ORD-1003",
+    status: "picked_up",
+    location: "North Hub",
+    timestamp: ISODate("2026-08-21T09:00:00Z")
+  },
+  {
+    orderNumber: "ORD-1003",
+    status: "delivered",
+    location: "Customer Address 03",
+    timestamp: ISODate("2026-08-21T16:40:00Z")
+  },
+  {
+    orderNumber: "ORD-1006",
+    status: "picked_up",
+    location: "Central Warehouse",
+    timestamp: ISODate("2026-08-23T10:00:00Z")
+  },
+  {
+    orderNumber: "ORD-1006",
+    status: "delivered",
+    location: "Customer Address 02",
+    timestamp: ISODate("2026-08-23T12:30:00Z")
+  },
+  {
+    orderNumber: "ORD-1007",
+    status: "picked_up",
+    location: "Central Warehouse",
+    timestamp: ISODate("2026-08-24T13:00:00Z")
+  },
+  {
+    orderNumber: "ORD-1007",
+    status: "delayed",
+    location: "Cali",
+    timestamp: ISODate("2026-08-24T17:30:00Z")
+  },
+  {
+    orderNumber: "ORD-1008",
+    status: "picked_up",
+    location: "North Hub",
+    timestamp: ISODate("2026-08-25T09:00:00Z")
+  },
+  {
+    orderNumber: "ORD-1008",
+    status: "delivered",
+    location: "Customer Address 04",
+    timestamp: ISODate("2026-08-25T17:15:00Z")
+  }
+])
+

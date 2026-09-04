@@ -1,0 +1,25 @@
+/*
+-------------------------------------------------------------------
+Query 18 - Find orders that satisfy all of the following conditions:
+    Priority is express.
+    Total amount is greater than 80.
+    Status is not cancelled.
+-------------------------------------------------------------------
+*/
+
+use("prime_delivery");
+db.orders.find(
+  {
+    priority: "express",
+    totalAmount: { $gt: 80 },
+    status: { $ne: "cancelled" }
+  },
+  {
+    _id: 0,
+    orderNumber: 1,
+    customerEmail: 1,
+    status: 1,
+    priority: 1,
+    totalAmount: 1
+  }
+).sort({ totalAmount: -1 })

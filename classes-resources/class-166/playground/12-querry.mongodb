@@ -1,0 +1,23 @@
+/*
+-------------------------------------------------------------------
+Query 12 - Find payments whose status is either:
+    -pending
+    -failed
+-------------------------------------------------------------------
+*/
+use("prime_delivery");
+
+
+db.payments.find(
+  {
+    status: { $in: ["pending", "failed"] }
+  },
+  {
+    _id: 0,
+    paymentId: 1,
+    orderNumber: 1,
+    amount: 1,
+    status: 1,
+    method: 1
+  }
+)

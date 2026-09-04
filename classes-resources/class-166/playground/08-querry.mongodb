@@ -1,0 +1,16 @@
+/*
+-------------------------------------------------------------------
+Query 08 - Active Vehicles
+Find all vehicles that:
+    - Are currently active.
+    - Have a capacity greater than 1000 kg.
+-------------------------------------------------------------------
+*/
+use("prime_delivery");
+
+db.vehicles.find({
+    status: "active",
+    capacityKg: {
+        $gte: 1000
+    }
+});

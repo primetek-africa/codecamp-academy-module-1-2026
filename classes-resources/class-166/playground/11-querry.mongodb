@@ -1,0 +1,13 @@
+/*
+-------------------------------------------------------------------
+Query 11 - High-Value Payments
+Find payments where the amount is greater than 90.
+Exclude the _id field from the results.
+-------------------------------------------------------------------
+*/
+use("prime_delivery");
+
+db.payments.find(
+  { amount: { $gt: 90 } },
+  { _id: 0 }
+)

@@ -1,0 +1,23 @@
+/*
+-------------------------------------------------------------------
+Query 15 - Find packages whose weight is:
+    Less than 2 kg.
+    Or greater than 8 kg.
+-------------------------------------------------------------------
+*/
+
+use("prime_delivery");
+db.packages.find(
+  {
+    $or: [
+      { weightKg: { $lt: 2 } },
+      { weightKg: { $gt: 8 } }
+    ]
+  },
+  {
+    _id: 0,
+    trackingNumber: 1,
+    description: 1,
+    weightKg: 1
+  }
+)

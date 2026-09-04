@@ -1,0 +1,22 @@
+/*
+-------------------------------------------------------------------
+Query 17 - Find delivery events that occurred after:
+    2026-08-24T12:00:00Z
+-------------------------------------------------------------------
+*/
+
+use("prime_delivery");
+db.delivery_events.find(
+  {
+    timestamp: {
+      $gt: new Date("2026-08-24T12:00:00Z")
+    }
+  },
+  {
+    _id: 0,
+    orderNumber: 1,
+    status: 1,
+    location: 1,
+    timestamp: 1
+  }
+).sort({ timestamp: 1 })
