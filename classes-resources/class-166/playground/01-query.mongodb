@@ -1,0 +1,12 @@
+/* 
+-------------------------------------------------------------------
+Query 01 - Active Customers
+Find all customers who are currently active.
+Your query must use the active field.
+-------------------------------------------------------------------
+*/
+use("prime_delivery");
+
+db.customers.find({ 
+    active: true 
+});

@@ -1,0 +1,16 @@
+/*
+-------------------------------------------------------------------
+Query 05 - Orders Outside a Price Range
+Find orders whose total amount is:
+    - Greater than or equal to 50.
+    - Less than or equal to 100.
+-------------------------------------------------------------------
+*/
+use("prime_delivery");
+
+db.orders.find({
+    totalAmount: { 
+        $gte: 50,
+        $lte: 100
+    }
+});

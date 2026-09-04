@@ -1,0 +1,14 @@
+/*
+-------------------------------------------------------------------
+Query 02 - High-Value Orders
+Find all orders where the total amount is greater than 80.
+Use an appropriate comparison operator.
+-------------------------------------------------------------------
+*/
+use("prime_delivery");
+
+db.orders.find({
+    totalAmount: {
+        $gt: 80
+    }
+});

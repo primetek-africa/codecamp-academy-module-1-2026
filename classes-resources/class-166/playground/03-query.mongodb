@@ -1,0 +1,16 @@
+/*
+-------------------------------------------------------------------
+Query 03 - Express Orders
+Find all orders where:
+    - The priority is express.
+    - The total amount is greater than 80.
+-------------------------------------------------------------------
+*/
+use("prime_delivery");
+
+db.orders.find({
+    priority: "express",
+    totalAmount: {
+        $gt: 80
+    }
+});
