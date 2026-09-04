@@ -1,0 +1,17 @@
+/*
+-------------------------------------------------------------------
+Query 11 - Expensive Payments
+    - Find payments where the amount is greater than 90.
+    - Exclude the following fields from the result: _id
+-------------------------------------------------------------------
+*/
+use("prime_delivery");
+
+db.payments.find({ 
+    amount: { 
+        $gt: 90 
+    } 
+}, { 
+    _id: 0 
+    } 
+);

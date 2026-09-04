@@ -1,0 +1,30 @@
+/*
+-------------------------------------------------------------------
+Query 11 - Unsuccessful Payments
+Find payments whose status is either:
+    - pending
+    or
+    - failed
+Return:
+    - paymentId
+    - orderNumber
+    - amount
+    - status
+    - method
+-------------------------------------------------------------------
+*/
+use("prime_delivery");
+
+db.payments.find({ 
+    status: { 
+        $in: ["pending", "failed"] 
+    } 
+}, { 
+    _id: 0, 
+    paymentId: 1, 
+    orderNumber: 1, 
+    amount: 1, 
+    status: 1, 
+    method: 1 
+    } 
+);
