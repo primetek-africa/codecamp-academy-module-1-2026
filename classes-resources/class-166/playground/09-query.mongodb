@@ -1,0 +1,16 @@
+/*
+-------------------------------------------------------------------
+Query 09 - Fragile Packages
+Find all packages that are:
+    - Fragile.
+    - Heavier than 5 kg.
+-------------------------------------------------------------------
+*/
+use("prime_delivery");
+
+db.packages.find({
+    fragile: true,
+    weightKg: {
+        $gte: 5
+    }
+});

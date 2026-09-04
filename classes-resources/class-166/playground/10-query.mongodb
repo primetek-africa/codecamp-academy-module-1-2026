@@ -1,0 +1,11 @@
+/*
+-------------------------------------------------------------------
+Query 10 - Electronics Packages
+Find packages where the category is electronics.
+-------------------------------------------------------------------
+*/
+use("prime_delivery");
+
+db.packages.find({
+    category: "electronics"
+});
