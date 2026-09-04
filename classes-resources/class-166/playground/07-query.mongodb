@@ -8,5 +8,9 @@ Sort the results from the highest rating to the lowest rating.
 use("prime_delivery");
 
 db.drivers.find({
-
+    rating: {
+        $gte: 4.7
+    }
+}).sort({
+    rating: -1
 });
