@@ -22,8 +22,8 @@ exercises, and programming challenges used during the classes.
 **Cristian Camilo** 
 
 Systems Engineer specializing in **Full-Stack Web Development**, with professional 
-experience building web applications, RESTful APIs, and backend systems using 
-modern development practices.
+experience building web applications, RESTful and GraphQL APIs, and backend systems 
+using modern development practices.
 
 As an instructor, Cristian focuses on helping students develop strong foundations 
 in programming, problem solving, and software engineering principles used in real-world 
